@@ -26,7 +26,10 @@ class DashboardNcUber extends StatelessWidget {
                   children: [
                     Center(
                       child: Text('所有拼車',
-                          style: Theme.of(context).textTheme.titleLarge),
+                          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.primary
+                          )),
                     ),
                     viewModel.allCarPool.isEmpty
                         ? Expanded(
@@ -87,28 +90,31 @@ class _CarPoolCardState extends State<CarPoolCard> {
   Widget getChip() {
     Color color = Color(widget.carPoolData.status!.statusColor);
     return Chip(
-      visualDensity: VisualDensity.compact,
-      backgroundColor: color.withOpacity(0.15),
-      avatar: CircleAvatar(backgroundColor: color, radius: 5,),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      side: BorderSide(color: color.withOpacity(0.2), width: 1),
-      labelStyle: Theme.of(context).textTheme.labelSmall!.copyWith(
-        fontWeight: FontWeight.bold,
-        color: color
-      ),
-      label: Text(widget.carPoolData.status!.statusName));
+        visualDensity: VisualDensity.compact,
+        backgroundColor: color.withOpacity(0.15),
+        avatar: CircleAvatar(
+          backgroundColor: color,
+          radius: 5,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        side: BorderSide(color: color.withOpacity(0.2), width: 0),
+        labelStyle: Theme.of(context)
+            .textTheme
+            .labelSmall!
+            .copyWith(fontWeight: FontWeight.bold, color: color),
+        label: Text(widget.carPoolData.status!.statusName));
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
       child: Card(
-        elevation: 3,
+        elevation: 3.5,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 14),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +130,7 @@ class _CarPoolCardState extends State<CarPoolCard> {
                           .titleLarge!
                           .copyWith(fontWeight: FontWeight.bold)),
                   // car pool persons num display
-                  Text('0 / ${widget.carPoolData.personsNumLimit}',
+                  Text('${widget.carPoolData.personUids.length} / ${widget.carPoolData.personsNumLimit}',
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium!

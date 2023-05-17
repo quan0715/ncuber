@@ -1,5 +1,7 @@
 import 'dart:ffi';
 
+import 'package:ncuber/model/msg_model.dart';
+
 /// Type: model Class
 /// Descriptions: 併車的(房間)屬性
 /// Author: Staler2019(Github.com)
@@ -44,6 +46,8 @@ class CarModel {
   int? totalExceptCost; // 搭乘總花費
   String? genderLimit; // 性別限制
   Float? ratingStandard; // 乘客最低分數
+  List<int> personUids; // 併車的人
+  List<MsgModel> msgHists; // 最後n則歷史訊息
   CarModel(
       {this.roomTitle,
       this.status,
@@ -56,7 +60,11 @@ class CarModel {
       this.personsNumLimit,
       this.totalExceptCost,
       this.genderLimit,
-      this.ratingStandard});
+      this.ratingStandard,
+      this.personUids = const [],
+      this.msgHists = const []
+    });
+  
   factory CarModel.create(int launchPersonUid) => CarModel(
         roomTitle: 'NCUBER new',
         status: CarStatus.notReady(),
@@ -66,9 +74,16 @@ class CarModel {
         startLoc: '中央大學正門口',
         endTime: DateTime.now(),
         endLoc: '桃園高鐵站',
-        personsNumLimit: 4,
+        personsNumLimit: 5,
         totalExceptCost: 0,
         ratingStandard: const Float(),
         genderLimit: '',
+        personUids: [launchPersonUid],
+        msgHists: const []
       );
+  
+  // CarStatus cardStatusRule(){
+  
+  // }
+
 }
