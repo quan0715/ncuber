@@ -1,18 +1,39 @@
 import 'dart:ffi';
 
-/// Type: model class
-/// Descriptions: 乘客屬性
-/// Author: Staler2019(Github.com)
 class PersonModel {
-  late int uid; // user id
-  late List<int> carpoolSsnHists; // 併車紀錄
-  late Float rating; // 併車評分 from carpoolSsnHists
+  int? uid; // user id
+  List<int>? carpoolSsnHists; // 併車紀錄
+  Float? rating; // 併車評分 from carpoolSsnHists
 
   // from portal
-  late String name; //名字
-  late String phone; // 手機
-  late String studentId; // 學號
-  late String gender; // 性別
-  late String department; // 就讀學位名
-  late String grade; // 年級
+  String? name; //名字
+  String? phone; // 手機
+  String? studentId; // 學號
+  String? gender; // 性別
+  String? department; // 就讀學位名
+  String? grade; // 年級
+
+  PersonModel({
+    this.uid,
+    this.carpoolSsnHists,
+    this.rating,
+    this.name,
+    this.phone,
+    this.studentId,
+    this.gender,
+    this.department,
+    this.grade,
+  });
+
+  factory PersonModel.fromJSON(Map<String, dynamic> json) => PersonModel(
+    uid: json["uid"] as int,
+    carpoolSsnHists: json['carpoolSsnHists'] as List<int>,
+    rating: json['rating'] as Float,
+    name: json['name'] as String,
+    phone: json['phone'] as String,
+    studentId: json['studentId'] as String,
+    gender: json['gender'] as String,
+    department: json['department'] as String,
+    grade: json['grade'] as String,
+  );
 }
