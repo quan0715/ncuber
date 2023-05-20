@@ -28,7 +28,7 @@ class PersonModel {
   factory PersonModel.fromJSON(Map<String, dynamic> json) => PersonModel(
     uid: json["uid"] as int,
     carpoolSsnHists: json['carpoolSsnHists'] as List<int>,
-    rating: (json['total_rating'] ?? 5) as double, // if null then return 5
+    rating: (json['total_rating'] ?? 5.0) as double, // if null then return 5
     name: json['name'] as String,
     phone: json['phone'] as String,
     studentId: json['studentId'] as String,
