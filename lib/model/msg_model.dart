@@ -1,9 +1,18 @@
-/// Type: model class
-/// Descriptions: 訊息屬性
-/// Author: Staler2019(Github.com)
 class MsgModel {
-  late int carpoolSsn;
-  late DateTime releaseTime; // 傳訊時間
-  late String text; // 訊息內容
-  late int personUid; // 發言人uid
+  int? carpoolSsn;
+  DateTime? releaseTime; // 傳訊時間 // server store as string
+  String? text; // 訊息內容
+  int? personUid; // 發言人uid
+
+  MsgModel({this.carpoolSsn,
+  this.releaseTime,
+  this.text,
+  this.personUid});
+
+  factory MsgModel.fromJson(Map<String, dynamic> json) => MsgModel(
+    carpoolSsn: json['carpoolSsn'] as int,
+    releaseTime: DateTime.tryParse(json['releaseTime'] as String) as DateTime,
+    text: json['text'] as String,
+    personUid: json['personUid'] as int,
+  );
 }
