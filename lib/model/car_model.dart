@@ -59,9 +59,9 @@ class CarModel {
   DateTime? endTime; // 預期到達時間
   String? endLoc; // 目的地
   int? personsNumLimit; // 人數上限
-  int? totalExceptCost; // 搭乘總花費
+  int? totalExpectCost; // 搭乘總花費
   String? genderLimit; // 性別限制
-  Float? ratingStandard; // 乘客最低分數
+  double? ratingStandard; // 乘客最低分數
   List<int> personUids; // 併車的人
   List<MsgModel> msgHists; // 最後n則歷史訊息
 
@@ -75,7 +75,7 @@ class CarModel {
       this.endTime,
       this.endLoc,
       this.personsNumLimit,
-      this.totalExceptCost,
+      this.totalExpectCost,
       this.genderLimit,
       this.ratingStandard,
       this.personUids = const [],
@@ -92,8 +92,8 @@ class CarModel {
         endTime: DateTime.now(),
         endLoc: '桃園高鐵站',
         personsNumLimit: 5,
-        totalExceptCost: 0,
-        ratingStandard: const Float(),
+        totalExpectCost: 0,
+        ratingStandard: 3,
         genderLimit: '',
         personUids: [launchPersonUid],
         msgHists: const []
@@ -112,10 +112,10 @@ class CarModel {
     startLoc: json['startLoc'] as String,
     endTime: DateTime.tryParse(json['endTime'] as String) as DateTime,
     personsNumLimit: json['personsNumLimit'] as int,
-    totalExceptCost: json['totalExceptCost'] as int,
-    ratingStandard: json['ratingStandard'] as Float,
+    totalExpectCost: json['totalExceptCost'] as int,
+    ratingStandard: json['ratingStandard'] as double,
     genderLimit: json['genderLimit'] as String,
-    personUids: json['personUids'] as List<int>,
-    msgHists: json['msgHists'] as List<MsgModel>,
+    personUids: json['uids'] as List<int>,
+    msgHists: <MsgModel>[for (final msgHist in json['msgHists']) MsgModel.fromJson(msgHist)],
   );
 }
