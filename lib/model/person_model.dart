@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class PersonModel {
   int? uid; // user id
   List<int>? carpoolSsnHists; // 併車紀錄
