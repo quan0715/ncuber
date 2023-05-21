@@ -5,11 +5,10 @@ class MsgModel {
   int? personUid; // 發言人uid
 
   MsgModel({this.carpoolSsn,
-  this.releaseTime,
-  this.te
-
-  static fromJson(msgHist) {}xt,
-  this.personUid});
+    this.releaseTime,
+    this.text,
+    this.personUid
+  });
 
   factory MsgModel.fromJson(Map<String, dynamic> json) => MsgModel(
     carpoolSsn: json['carpoolSsn'] as int,
