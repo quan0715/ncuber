@@ -2,15 +2,8 @@
 
 Uber for ncu student
 
-## Getting Started
+## Per-setting
 
-This project is a starting point for a Flutter application.
+### Android
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. go to `${flutter-env}/packages/flutter_tools/gradle/flutter.gradle` and modify `minSdkVersion` to above 20, or you would get an building error

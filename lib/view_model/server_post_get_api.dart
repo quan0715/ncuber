@@ -2,7 +2,7 @@ import 'package:ncuber/constants/constants.dart';
 import 'package:ncuber/model/car_model.dart';
 import 'package:ncuber/model/msg_model.dart';
 import 'package:ncuber/model/person_model.dart';
-import 'package:ncuber/view_model/ngrok_server_connector.dart';
+import 'package:ncuber/view_model/server_connector.dart';
 
 Future<List<CarModel>> reqLastNumsOfCarModel(int numsOfCar,
     {int numsOfMsg = MSG_SHOWING_NUMBERS}) async {
@@ -12,7 +12,7 @@ Future<List<CarModel>> reqLastNumsOfCarModel(int numsOfCar,
     "return_numbers_of_msgs": numsOfMsg,
   };
 
-  var json = await ngrokServerConnector(body);
+  var json = await serverConnector(body);
 
   if (json["type"] == body["type"]) {
     List<CarModel> carLists = [];
@@ -54,12 +54,12 @@ Future<int> sendCarModel(CarModel model) async {
   } else if (model.genderLimit != null) {
     body['genderLimit'] = model.genderLimit;
   } else if (model.ratingStandard != null) {
-    body['ratingStandard'] = model.genderLimit;
+    body['ratingStandard'] = model.ratingStandard;
   } else {
     throw Exception("null content before sending car model");
   }
 
-  var json = await ngrokServerConnector(body);
+  var json = await serverConnector(body);
 
   if (json["type"] == body["type"]) {
     return json["carpoolSsn"] as int;
@@ -84,7 +84,7 @@ void sendMsgModel(MsgModel model) async {
     throw Exception("null content before sending msg model");
   }
 
-  var json = await ngrokServerConnector(body);
+  var json = await serverConnector(body);
 
   if (json["type"] != body["type"]) {
     throw Exception('server return wrong type of model.');
@@ -97,7 +97,7 @@ Future<PersonModel> reqPersonModelByUid(int uid) async {
     "uid": uid,
   };
 
-  var json = await ngrokServerConnector(body);
+  var json = await serverConnector(body);
 
   if (json["type"] == body["type"]) {
     return PersonModel.fromJSON(json);
@@ -114,7 +114,7 @@ Future<CarModel> reqCarModelBySsn(int carpoolSsn,
     "return_numbers_of_msgs": numOfMsg,
   };
 
-  var json = await ngrokServerConnector(body);
+  var json = await serverConnector(body);
 
   if (json["type"] == body["type"]) {
     return CarModel.fromJson(json);
@@ -143,7 +143,7 @@ Future<int> sendPersonModel(PersonModel model) async {
     throw Exception("null content before sending person model");
   }
 
-  var json = await ngrokServerConnector(body);
+  var json = await serverConnector(body);
 
   if (json["type"] == body["type"]) {
     return json["personUid"] as int;
@@ -152,38 +152,50 @@ Future<int> sendPersonModel(PersonModel model) async {
   }
 }
 
-Future<int> addPersonToCarpool(int personUid, int carSsn) async {
+/// return json
+///   "status": INT, # success/fail:1/0
+///   "carpoolStatus": STRING,
+Future<Map<String, dynamic>> addPersonToCarpool(
+    int personUid, int carSsn) async {
   Map<String, dynamic> body = {
     "type": "add_person_to_carpool",
     "uid": personUid,
     "carpoolSsn": carSsn,
   };
 
-  var json = await ngrokServerConnector(body);
+  var json = await serverConnector(body);
 
   if (json["type"] == body["type"]) {
-    return json["status"] as int;
+    json.remove("type");
+    return json;
   } else {
     throw Exception('server return wrong type of model.');
   }
 }
 
-Future<int> rmPersonFromCarpool(int personUid, int carSsn) async {
+/// return json
+///   "status": INT, # success/fail:1/0
+///   "carpoolStatus": STRING,
+Future<Map<String, dynamic>> rmPersonFromCarpool(
+    int personUid, int carSsn) async {
   Map<String, dynamic> body = {
     "type": "rm_person_from_carpool",
     "uid": personUid,
     "carpoolSsn": carSsn,
   };
 
-  var json = await ngrokServerConnector(body);
+  var json = await serverConnector(body);
 
   if (json["type"] == body["type"]) {
-    return json["status"] as int;
+    json.remove("type");
+    return json;
   } else {
     throw Exception('server return wrong type of model.');
   }
 }
 
+/// return int
+///   success/fail:1/0
 Future<int> sendCarRating(int personUid, int carSsn, double rating) async {
   Map<String, dynamic> body = {
     "type": "send_carpool_rating",
@@ -192,10 +204,26 @@ Future<int> sendCarRating(int personUid, int carSsn, double rating) async {
     "carpoolSsn": carSsn,
   };
 
-  var json = await ngrokServerConnector(body);
+  var json = await serverConnector(body);
 
   if (json["type"] == body["type"]) {
     return json["status"] as int;
+  } else {
+    throw Exception('server return wrong type of model.');
+  }
+}
+
+Future<PersonModel> sendUserAuthData(String studentId, String password) async {
+  Map<String, dynamic> body = {
+    "type": "send_user_auth_data",
+    "studentId": studentId,
+    "password": password,
+  };
+
+  var json = await serverConnector(body);
+
+  if (json["type"] == body["type"]) {
+    return PersonModel.fromJSON(json);
   } else {
     throw Exception('server return wrong type of model.');
   }
