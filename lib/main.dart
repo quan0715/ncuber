@@ -23,7 +23,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const OuthView(),
-        // '/': (context) => const MapSample(),
         '/map': (context) => const MapSample(),
         '/dashboard': (context) => const DashboardView(),
         '/create': (context) => const CreateCarpoolView(),

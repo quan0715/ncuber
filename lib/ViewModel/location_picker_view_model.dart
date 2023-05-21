@@ -8,50 +8,44 @@ import 'package:ncuber/model/route.dart';
 class LocationPickerViewModel extends ChangeNotifier {
   MapAPIModel model = MapAPIModel();
   bool isLoading = false;
-  get startPoint => model.startPointLatLng ?? currentLocation;
-  get destination => model.destinationLatLng ?? currentLocation;
+  bool isStartPointTextFieldFocused = false;
+  bool isDestinationTextFieldFocused = false;
+  LatLng get startPoint => model.startPointLatLng ?? LatLng(24.96720974492558, 121.18772026151419);
+  LatLng get destination => model.destinationLatLng ?? LatLng(24.96720974492558, 121.18772026151419);
+  String get startAddress => model.startPointAddress ?? "";
+  String get destinationAddress => model.destinationAddress ?? "";
   LatLng currentLocation = const LatLng(24.96720974492558, 121.18772026151419);
   MapRoute? mapRoute = MapRoute(
       duration: const Duration(seconds: 0),
       distance: 0,
       points: [const LatLng(24.96720974492558, 121.18772026151419)]);
-  // DistanceCalculator distanceCalculator = DistanceCalculator();
 
-  void updateMap(String startAddress, String destinationAddress) async {
-    isLoading = true;
-    notifyListeners();
-    await model.startPoint(startAddress);
-    await model.destination(destinationAddress);
-    // route.routes.clear();
-    // await route.drawRoute(
-    //     [startPoint, destination], "路徑圖", Colors.blue, MapAPIModel.apiKey);
-    // debugPrint("${model.startPointAddress} ${model.destinationAddress}");
-    isLoading = false;
+  Future<void> onStartPointInputComplete() async {
+    await model.updateStartPointLatLng();
     notifyListeners();
   }
 
-  void updateStartPointAddress(String address) async {
-    isLoading = true;
+  Future<void> onDestinationInputComplete() async {
+    await model.updateDestinationPointLatLng();
     notifyListeners();
-    await model.startPoint(address);
-
-    // await route.drawRoute(
-    //     [startPoint, destination], "路徑圖", Colors.blue, MapAPIModel.apiKey);
-    // debugPrint("${model.startPointAddress} ${model.destinationAddress}");
-    isLoading = false;
-    notifyListeners();
-    // getRoute();
   }
 
-  void updateDestinationAddress(String address) async {
-    isLoading = true;
+  void onStartPointChange(String address) {
+    model.updateStartPoint(address);
     notifyListeners();
-    await model.destination(address);
-    // await route.drawRoute(
-    //     [startPoint, destination], "路徑圖", Colors.blue, MapAPIModel.apiKey);
-    isLoading = false;
+  }
+
+  void onDestinationChange(String address) async {
+    model.updateDestination(address);
     notifyListeners();
-    // getRoute();
+  }
+
+  String? startPointValidator(String? value) {
+    return startAddress.isEmpty ? "輸入不可為空" : null;
+  }
+
+  String? destinationPointValidator(String? value) {
+    return destinationAddress.isEmpty ? "輸入不可為空" : null;
   }
 
   void getUserLocation() async {
@@ -66,13 +60,23 @@ class LocationPickerViewModel extends ChangeNotifier {
   }
 
   Future routeApiTest() async {
-    isLoading = true;
-    notifyListeners();
+    // isLoading = true;
+    // notifyListeners();
     mapRoute = await model.fetchRouts();
-    debugPrint(mapRoute!.duration.toString());
-    // debugPrint(mapRoute!.distance.toString());
-    // debugPrint(mapRoute!.points.toString());
-    isLoading = false;
+    // debugPrint(mapRoute!.duration.toString());
+    // isLoading = false;
+    notifyListeners();
+  }
+
+  void onStartTextFieldFocused() {
+    isStartPointTextFieldFocused = true;
+    isDestinationTextFieldFocused = false;
+    notifyListeners();
+  }
+
+  void onDestinationTextFieldFocused() {
+    isDestinationTextFieldFocused = true;
+    isStartPointTextFieldFocused = false;
     notifyListeners();
   }
 }

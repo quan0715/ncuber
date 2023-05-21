@@ -39,7 +39,7 @@ class DashboardNcUber extends StatelessWidget {
                                 const Text('目前沒有任何拼車'),
                                 ElevatedButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(context, '/create');
+                                    Navigator.pushNamed(context, '/map');
                                   },
                                   child: const Text('發起拼車'),
                                 ),

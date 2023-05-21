@@ -12,7 +12,8 @@ import 'package:ncuber/model/route.dart';
 
 class MapAPIModel {
   static const String apiKey = "AIzaSyC4vGfQQlBs3BLelaaghVkaIccn6xS-GTk";
-  static const String baseURL = "https://routes.googleapis.com/directions/v2:computeRoutes";
+  static const String baseURL =
+      "https://routes.googleapis.com/directions/v2:computeRoutes";
 
   String? startPointAddress;
   String? destinationAddress;
@@ -24,14 +25,30 @@ class MapAPIModel {
   String duration = "";
   int distances = 0;
 
-  Future startPoint(String address) async {
+  void updateStartPoint(String address) async {
     startPointAddress = address;
-    startPointLatLng = await getLatLngFromAddress(startPointAddress!);
   }
 
-  Future destination(String address) async {
+  void updateDestination(String address) async {
     destinationAddress = address;
-    destinationLatLng = await getLatLngFromAddress(destinationAddress!);
+  }
+
+  Future updateStartPointLatLng() async {
+    try {
+      startPointLatLng = await getLatLngFromAddress(startPointAddress!);
+    } catch (e) {
+      debugPrint(e.toString());
+      // startPointLatLng = null;
+    }
+  }
+
+  Future updateDestinationPointLatLng() async {
+    try {
+      destinationLatLng = await getLatLngFromAddress(destinationAddress!);
+    } catch (e) {
+      debugPrint(e.toString());
+      // destinationLatLng = null;
+    }
   }
 
   Future<LatLng> getLatLngFromAddress(String searchText) async {
@@ -73,10 +90,20 @@ class MapAPIModel {
     };
     final body = jsonEncode({
       "origin": {
-        "address": startPointAddress
+        "location": {
+          "latLng": {
+            "latitude": startPointLatLng!.latitude,
+            "longitude": startPointLatLng!.longitude
+          }
+        }
       },
       "destination": {
-        "address": destinationAddress
+        "location": {
+          "latLng": {
+            "latitude": destinationLatLng!.latitude,
+            "longitude": destinationLatLng!.longitude
+          }
+        }
       },
       "travelMode": "DRIVE",
       "computeAlternativeRoutes": false,
@@ -98,5 +125,3 @@ class MapAPIModel {
     }
   }
 }
-
-

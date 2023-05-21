@@ -24,7 +24,7 @@ class _DashboardViewState extends State<DashboardView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/create');
+          Navigator.pushNamed(context, '/map');
         },
         child: const Icon(Icons.add),
       ),
