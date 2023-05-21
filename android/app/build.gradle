@@ -51,8 +51,8 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        manifestPlaceholders = [
-                'appAuthRedirectScheme': 'com.example.ncuber'
+        manifestPlaceholders += [
+                'appAuthRedirectScheme': 'com.example.ncuber://login-callback'
         ]
     }
 
