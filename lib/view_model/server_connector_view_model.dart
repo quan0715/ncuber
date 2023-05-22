@@ -1,29 +1,20 @@
-import 'dart:convert';
 import 'dart:async';
 
 import 'package:http/http.dart' as http;
 import 'package:ncuber/constants/constants.dart';
-import 'package:encrypt/encrypt.dart';
-
-final key = Key.fromUtf8(")J@NcRfUjXn2r5u8");
-const clientId = 'iBTFJjVUJQ7uZa4MVLXRcM2WLN6S1P';
-// final body_key = Key.fromUtf8("UjXn2r5u8x/A?D(G");
-// final iv = IV.fromLength(16);
+import 'package:ncuber/view_model/server_encrypter_model_view.dart';
 
 Future<Map<String, dynamic>> serverConnector(
     Map<String, dynamic> jsonBody) async {
   Map<String, String> headers = {
     'Content-Type': 'application/json; charset=UTF-8',
-    'clientId': clientId,
+    'clientId': SERVER_CLIENT_ID,
   };
 
-  final encrypter = Encrypter(AES(key));
+  final serverEncrypterModelView = ServerEncrypterModelView();
 
-  String jsonEncodedHeader = jsonEncode(headers);
-  String encryptedHeader = encrypter.encrypt(jsonEncodedHeader).base64;
-
-  String jsonEncodedBody = jsonEncode(jsonBody);
-  String encryptedBody = encrypter.encrypt(jsonEncodedBody).base64;
+  String encryptedHeader = serverEncrypterModelView.encryptToSend(headers);
+  String encryptedBody = serverEncrypterModelView.encryptToSend(jsonBody);
 
   final resp = await http.post(Uri.parse(SERVER_URL),
       headers: <String, String>{"Encrypted-Header": encryptedHeader},
@@ -31,15 +22,13 @@ Future<Map<String, dynamic>> serverConnector(
 
   if (resp.statusCode == 200) {
     String? unDecodedHeader = resp.headers['Encrypted-Header'];
-    String decodedHeader =
-        encrypter.decrypt(Encrypted.fromBase64(unDecodedHeader!));
-    Map<String, dynamic> real_header = jsonDecode(decodedHeader);
+    Map<String, dynamic> realHeader =
+        serverEncrypterModelView.decryptFromReceiving(unDecodedHeader!);
 
-    if (real_header['clientId'] == clientId) {
+    if (realHeader['clientId'] == SERVER_CLIENT_ID) {
       String unDecodedBody = resp.body;
-      String decodedBody =
-          encrypter.decrypt(Encrypted.fromBase64(unDecodedBody));
-      Map<String, dynamic> realBody = jsonDecode(decodedBody);
+      Map<String, dynamic> realBody =
+          serverEncrypterModelView.decryptFromReceiving(unDecodedBody);
 
       return realBody;
     } else {
