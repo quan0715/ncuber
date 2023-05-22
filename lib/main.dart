@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ncuber/view/create_car_pool_view.dart';
+import 'package:ncuber/view/create_carpool_view.dart';
 import 'package:ncuber/view/dashboard_view.dart';
 import 'package:ncuber/view/outh_page_view.dart';
-import 'package:ncuber/view/setLocationView.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -23,9 +23,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const OuthView(),
-        '/map': (context) => const MapSample(),
+        '/map': (context) => const CreateCarPoolView(),
         '/dashboard': (context) => const DashboardView(),
-        '/create': (context) => const CreateCarpoolView(),
       },
       // home: const OuthView()
     );

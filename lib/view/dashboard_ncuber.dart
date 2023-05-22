@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ncuber/model/car_model.dart';
-import 'package:ncuber/view/dashboard_view.dart';
 import 'package:provider/provider.dart';
 
 class DashboardViewModel extends ChangeNotifier {
@@ -71,6 +70,7 @@ class CarPoolCard extends StatefulWidget {
 class _CarPoolCardState extends State<CarPoolCard> {
   Widget getTimeLocDisplay({required DateTime time, required String loc}) {
     final formatter = DateFormat('yyyy-MM-dd HH:mm');
+    
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,

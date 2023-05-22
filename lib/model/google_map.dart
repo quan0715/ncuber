@@ -12,8 +12,7 @@ import 'package:ncuber/model/route.dart';
 
 class MapAPIModel {
   static const String apiKey = "AIzaSyC4vGfQQlBs3BLelaaghVkaIccn6xS-GTk";
-  static const String baseURL =
-      "https://routes.googleapis.com/directions/v2:computeRoutes";
+  static const String baseURL ="https://routes.googleapis.com/directions/v2:computeRoutes";
 
   String? startPointAddress;
   String? destinationAddress;
@@ -38,7 +37,7 @@ class MapAPIModel {
       startPointLatLng = await getLatLngFromAddress(startPointAddress!);
     } catch (e) {
       debugPrint(e.toString());
-      // startPointLatLng = null;
+      startPointLatLng = null;
     }
   }
 
@@ -47,7 +46,7 @@ class MapAPIModel {
       destinationLatLng = await getLatLngFromAddress(destinationAddress!);
     } catch (e) {
       debugPrint(e.toString());
-      // destinationLatLng = null;
+      destinationLatLng = null;
     }
   }
 
@@ -60,18 +59,18 @@ class MapAPIModel {
 
   Future getUserLocation() async {
     Location location = Location();
-    bool _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
+    bool serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
         return;
       }
     }
     // Check if permission is granted
-    PermissionStatus _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
+    PermissionStatus permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
         return;
       }
     }
@@ -117,8 +116,6 @@ class MapAPIModel {
       Map<String, dynamic> data = jsonDecode(result.body);
       debugPrint(data.toString());
       return MapRoute.fromJson(data);
-      // debugPrint(result.toString());
-      // decodePolyline(encodedPolyline);
     } on SocketException catch (e) {
       debugPrint(e.toString());
       return null;

@@ -33,9 +33,9 @@ Future<Map<String, dynamic>> serverConnector(
     String? unDecodedHeader = resp.headers['Encrypted-Header'];
     String decodedHeader =
         encrypter.decrypt(Encrypted.fromBase64(unDecodedHeader!));
-    Map<String, dynamic> real_header = jsonDecode(decodedHeader);
+    Map<String, dynamic> realHeader = jsonDecode(decodedHeader);
 
-    if (real_header['clientId'] == clientId) {
+    if (realHeader['clientId'] == clientId) {
       String unDecodedBody = resp.body;
       String decodedBody =
           encrypter.decrypt(Encrypted.fromBase64(unDecodedBody));
