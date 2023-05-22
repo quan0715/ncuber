@@ -3,7 +3,7 @@ import 'package:ncuber/view/create_car_pool_view.dart';
 import 'package:ncuber/view/dashboard_view.dart';
 import 'package:ncuber/view/outh_page_view.dart';
 import 'package:ncuber/view/setLocationView.dart';
-import 'package:ncuber/view_model/permission_requestor.dart';
+import 'package:ncuber/view_model/permission_requester_view_model.dart';
 
 void main() {
   runApp(const MyApp());

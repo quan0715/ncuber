@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ncuber/ViewModel/create_carpool_view_model.dart';
+import 'package:ncuber/view_model/create_carpool_view_model.dart';
 import 'package:provider/provider.dart';
 
 class CreateCarpoolView extends StatefulWidget {

@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:ncuber/ViewModel/location_picker_view_model.dart';
+import 'package:ncuber/view_model/location_picker_view_model.dart';
 import 'package:ncuber/model/car_model.dart';
 import 'package:ncuber/view/dashboard_ncuber.dart';
 import 'package:provider/provider.dart';

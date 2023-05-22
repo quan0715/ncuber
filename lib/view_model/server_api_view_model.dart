@@ -2,7 +2,7 @@ import 'package:ncuber/constants/constants.dart';
 import 'package:ncuber/model/car_model.dart';
 import 'package:ncuber/model/msg_model.dart';
 import 'package:ncuber/model/person_model.dart';
-import 'package:ncuber/view_model/server_connector.dart';
+import 'package:ncuber/view_model/server_connector_view_model.dart';
 
 Future<List<CarModel>> reqLastNumsOfCarModel(int numsOfCar,
     {int numsOfMsg = MSG_SHOWING_NUMBERS}) async {
