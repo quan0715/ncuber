@@ -1,10 +1,61 @@
-import 'package:ncuber/constants/constants.dart';
-import 'package:ncuber/model/car_model.dart';
-import 'package:ncuber/model/msg_model.dart';
-import 'package:ncuber/model/person_model.dart';
-import 'package:ncuber/view_model/server_connector_view_model.dart';
+import 'dart:convert';
 
-Future<List<CarModel>> reqLastNumsOfCarModel(int numsOfCar,
+import 'package:http/http.dart' as http;
+import 'package:encrypt/encrypt.dart';
+import 'package:ncuber/constants/constants.dart';
+import 'package:ncuber/view_model/person_view_model.dart';
+
+
+/// Reference: https://www.liujunmin.com/flutter/provider/provider_mvvm.html
+class ServerService {
+  static var key = Key.fromUtf8(")J@NcRfUjXn2r5u8");
+  static var encrypter = Encrypter(AES(key));
+
+  static const Map<String, String> headers = {
+    'Content-Type': 'application/json; charset=UTF-8',
+    'clientId': SERVER_CLIENT_ID,
+  };
+  static String encryptedHeader = encrypt(headers);
+
+  static Future<Map<String, dynamic>> postGet(
+      Map<String, dynamic> jsonBody) async {
+    final resp = await http.post(Uri.parse(SERVER_URL),
+        headers: <String, String>{"Encrypted-Header": encryptedHeader},
+        body: encrypt(jsonBody));
+
+    if (resp.statusCode == 200) {
+      String? unDecodedHeader = resp.headers['Encrypted-Header'];
+      Map<String, dynamic> realHeader = decrypt(unDecodedHeader!);
+
+      if (realHeader['clientId'] == SERVER_CLIENT_ID) {
+        String unDecodedBody = resp.body;
+        Map<String, dynamic> realBody = decrypt(unDecodedBody);
+        return realBody;
+
+      } else {
+        throw Exception('Server give wrong clientId');
+
+      }
+    } else {
+      throw Exception('Failed to post to server.');
+
+    }
+  }
+
+  static String encrypt(Map<String, dynamic> json) {
+    return encrypter.encrypt(jsonEncode(json)).base64;
+
+  }
+
+  static Map<String, dynamic> decrypt(String msg) {
+    return jsonDecode(encrypter.decrypt(Encrypted.fromBase64(msg)));
+
+  }
+
+  /// --- server apis ---
+  /// FIXME. model to model_view
+
+  Future<List<CarModel>> reqLastNumsOfCarModel(int numsOfCar,
     {int numsOfMsg = MSG_SHOWING_NUMBERS}) async {
   Map<String, dynamic> body = {
     "type": "req_nums_of_carpool",
@@ -12,7 +63,7 @@ Future<List<CarModel>> reqLastNumsOfCarModel(int numsOfCar,
     "return_numbers_of_msgs": numsOfMsg,
   };
 
-  var json = await serverConnector(body);
+  var json = await postGet(body);
 
   if (json["type"] == body["type"]) {
     List<CarModel> carLists = [];
@@ -59,7 +110,7 @@ Future<int> sendCarModel(CarModel model) async {
     throw Exception("null content before sending car model");
   }
 
-  var json = await serverConnector(body);
+  var json = await postGet(body);
 
   if (json["type"] == body["type"]) {
     return json["carpoolSsn"] as int;
@@ -84,20 +135,35 @@ void sendMsgModel(MsgModel model) async {
     throw Exception("null content before sending msg model");
   }
 
-  var json = await serverConnector(body);
+  var json = await postGet(body);
 
   if (json["type"] != body["type"]) {
     throw Exception('server return wrong type of model.');
   }
 }
 
-Future<PersonModel> reqPersonModelByUid(int uid) async {
+// Future<PersonModel> reqPersonModelByUid(int uid) async {
+//   Map<String, dynamic> body = {
+//     "type": "req_person_by_uid",
+//     "uid": uid,
+//   };
+
+//   var json = await postGet(body);
+
+//   if (json["type"] == body["type"]) {
+//     return PersonModel.fromJSON(json);
+//   } else {
+//     throw Exception('server return wrong type of model.');
+//   }
+// }
+
+Future<void> reqPersonModelByUid(PersonViewModel personViewModel) async {
   Map<String, dynamic> body = {
     "type": "req_person_by_uid",
     "uid": uid,
   };
 
-  var json = await serverConnector(body);
+  var json = await postGet(body);
 
   if (json["type"] == body["type"]) {
     return PersonModel.fromJSON(json);
@@ -114,7 +180,7 @@ Future<CarModel> reqCarModelBySsn(int carpoolSsn,
     "return_numbers_of_msgs": numOfMsg,
   };
 
-  var json = await serverConnector(body);
+  var json = await postGet(body);
 
   if (json["type"] == body["type"]) {
     return CarModel.fromJson(json);
@@ -143,7 +209,7 @@ Future<int> sendPersonModel(PersonModel model) async {
     throw Exception("null content before sending person model");
   }
 
-  var json = await serverConnector(body);
+  var json = await postGet(body);
 
   if (json["type"] == body["type"]) {
     return json["personUid"] as int;
@@ -163,7 +229,7 @@ Future<Map<String, dynamic>> addPersonToCarpool(
     "carpoolSsn": carSsn,
   };
 
-  var json = await serverConnector(body);
+  var json = await postGet(body);
 
   if (json["type"] == body["type"]) {
     json.remove("type");
@@ -184,7 +250,7 @@ Future<Map<String, dynamic>> rmPersonFromCarpool(
     "carpoolSsn": carSsn,
   };
 
-  var json = await serverConnector(body);
+  var json = await postGet(body);
 
   if (json["type"] == body["type"]) {
     json.remove("type");
@@ -204,7 +270,7 @@ Future<int> sendCarRating(int personUid, int carSsn, double rating) async {
     "carpoolSsn": carSsn,
   };
 
-  var json = await serverConnector(body);
+  var json = await postGet(body);
 
   if (json["type"] == body["type"]) {
     return json["status"] as int;
@@ -220,7 +286,7 @@ Future<PersonModel> sendUserAuthData(String studentId, String password) async {
     "password": password,
   };
 
-  var json = await serverConnector(body);
+  var json = await postGet(body);
 
   if (json["type"] == body["type"]) {
     return PersonModel.fromJSON(json);
@@ -228,3 +294,7 @@ Future<PersonModel> sendUserAuthData(String studentId, String password) async {
     throw Exception('server return wrong type of model.');
   }
 }
+
+
+}
+
