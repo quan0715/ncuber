@@ -4,9 +4,17 @@ import 'package:ncuber/view/dashboard_view.dart';
 import 'package:ncuber/view/outh_page_view.dart';
 import 'package:ncuber/view_model/permission_requester_view_model.dart';
 
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

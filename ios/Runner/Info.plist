@@ -56,7 +56,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>ncuber:/login-callback</string>
+				<string>com.googleusercontent.apps.183089429196-us4i4m87tkmtdsetk5c0gg3klh6f8s7v</string>
 			</array>
 		</dict>
 	</array>

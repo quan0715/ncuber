@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "183089429196",
+    "project_id": "ncuber",
+    "storage_bucket": "ncuber.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:183089429196:android:1538725084b2746c86e069",
+        "android_client_info": {
+          "package_name": "com.example.ncuber"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "183089429196-e4nq2m47nhr8jds8199sbn72ru7mlmc5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAtv9HPvdWj9Qe1yP9qMYddiqXhdV8PPk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "183089429196-e4nq2m47nhr8jds8199sbn72ru7mlmc5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
