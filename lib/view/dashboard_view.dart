@@ -14,6 +14,7 @@ class _DashboardViewState extends State<DashboardView> {
   final pages = <Widget>[
     const DashboardNcUber(),
     const UserLog(),
+    const UserLog(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -22,11 +23,12 @@ class _DashboardViewState extends State<DashboardView> {
         title: const Text('NCUBER'),
         automaticallyImplyLeading: false,
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
+        label: const Text('發起共乘'),
+        icon: const Icon(Icons.add),
         onPressed: () {
           Navigator.pushNamed(context, '/map');
         },
-        child: const Icon(Icons.add),
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: selectedIndex,
@@ -43,6 +45,10 @@ class _DashboardViewState extends State<DashboardView> {
           ),
           NavigationDestination(
             icon: Icon(Icons.person),
+            label: '我的共乘',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.history),
             label: '歷程紀錄',
           ),
         ],

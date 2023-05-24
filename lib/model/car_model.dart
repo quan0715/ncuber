@@ -97,9 +97,6 @@ class CarModel {
         msgHists: const []
       );
 
-  // CarStatus cardStatusRule(){
-
-  // }
 
   factory CarModel.fromJson(Map<String, dynamic> json) => CarModel(
     roomTitle: json['roomTitle'] as String,

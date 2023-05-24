@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:ncuber/components/carpool_button_sheet.dart';
 import 'package:ncuber/model/car_model.dart';
 import 'package:ncuber/view_model/creat_carpool_view_model.dart';
 import 'package:provider/provider.dart';
@@ -28,11 +29,55 @@ class CreateCarPoolViewState extends State<CreateCarPoolView> {
   }
 
   Future _showCheckSheet(CarModel model) async {
-    await showModalBottomSheet(
+    final result = await showModalBottomSheet(
         context: context,
-        builder: (context) => CarPoolCardWithMap(
+        isDismissible: false,
+        // useRootNavigator: true,
+        builder: (context) => CarPoolButtonSheetView(
               carPoolData: model,
+              buttomBar: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      elevation: 3.0,
+                      visualDensity: VisualDensity.compact,
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      foregroundColor: Theme.of(context).colorScheme.onSecondary,
+                    ),
+                    icon: const Icon(Icons.edit),
+                    label: const Text("修改資訊"),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      // TODO : create new car pool
+                      debugPrint("create new car pool");
+                      // add user to the car pool
+                      Navigator.pop(context, true);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      elevation: 3.0,
+                      visualDensity: VisualDensity.compact,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    icon: const Icon(Icons.check),
+                    label: const Text("建立共乘"),
+                  )
+                ],
+              ),
             ));
+    if (result) {
+      // TODO : create new car pool
+      debugPrint("create new car pool");
+      // add user to the car pool
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    }
   }
 
   String getTimeString(DateTime time) {
@@ -73,49 +118,50 @@ class CreateCarPoolViewState extends State<CreateCarPoolView> {
           ),
           ElevatedButton(
             onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+              visualDensity: VisualDensity.compact,
+            ),
             child: DropdownButton(
               isDense: true,
               elevation: 10,
               icon: const Icon(Icons.people),
-              value: 3,
+              value: model.numberOfPeopleDropdownMenuIndex,
               underline: Container(
                 height: 0,
               ),
-              items: const [
-                DropdownMenuItem(value: 1, child: Text('2 位')),
-                DropdownMenuItem(value: 2, child: Text('3 位')),
-                DropdownMenuItem(value: 3, child: Text('4 位')),
-                DropdownMenuItem(value: 4, child: Text('5 位')),
-                DropdownMenuItem(value: 5, child: Text('5 位')),
-              ],
-              onChanged: (value) {},
+              items: model.numberOfPeopleLabel
+                  .map((label) => DropdownMenuItem(value: model.numberOfPeopleLabel.indexOf(label), child: Text(label)))
+                  .toList(),
+              onChanged: (value) {
+                model.updateNumberOfPeople(value!);
+              },
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-          const SizedBox(
-            width: 5,
-          ),
+          const SizedBox(width: 5),
           ElevatedButton(
             onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              visualDensity: VisualDensity.compact,
+              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+            ),
             child: DropdownButton(
               elevation: 10,
               icon: const Icon(Icons.people),
               isDense: true,
-              value: 3,
+              value: model.genderConstrainDropdownMenuIndex,
               underline: Container(
                 height: 0,
               ),
-              items: const [
-                DropdownMenuItem(value: 1, child: Text("男性")),
-                DropdownMenuItem(value: 2, child: Text("女性")),
-                DropdownMenuItem(value: 3, child: Text("不限")),
-              ],
-              onChanged: (value) {},
+              items: model.genderConstrainLabel
+                  .map((label) => DropdownMenuItem(value: model.genderConstrainLabel.indexOf(label), child: Text(label)))
+                  .toList(),
+              onChanged: (value) {
+                model.updateGenderConstrainLabel(value!);
+              },
               borderRadius: BorderRadius.circular(10),
             ),
-          ),
-          const SizedBox(
-            width: 5,
           ),
         ],
       ),
@@ -126,7 +172,7 @@ class CreateCarPoolViewState extends State<CreateCarPoolView> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<CreateCarPoolViewModel>(
-      create: (context) => CreateCarPoolViewModel(),
+      create: (context) => CreateCarPoolViewModel()..getUserLocation(),
       child: Consumer<CreateCarPoolViewModel>(
         builder: (context, model, child) => model.isLoading
             ? const Center(child: CircularProgressIndicator())
@@ -140,12 +186,9 @@ class CreateCarPoolViewState extends State<CreateCarPoolView> {
                   actions: [
                     MaterialButton(
                         onPressed: () async {
-                          // final roomTitle = model.roomTitle;
-                          // final remark = model.roomRemark;
                           showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                      // icon: Icon(Icons.edit),
                                       title: const Text('輸入房間名稱與備註'),
                                       content: Column(
                                         mainAxisSize: MainAxisSize.min,
@@ -169,7 +212,6 @@ class CreateCarPoolViewState extends State<CreateCarPoolView> {
                                               onChanged: model.updateRemark,
                                               // expands: true,
                                               decoration: const InputDecoration(
-                                                // icon: Icon(Icons.note),
                                                 labelText: '備註',
                                               ),
                                             ),
@@ -177,14 +219,6 @@ class CreateCarPoolViewState extends State<CreateCarPoolView> {
                                         ],
                                       ),
                                       actions: <Widget>[
-                                        // ElevatedButton.icon(
-                                        //   icon: const Icon(Icons.cancel),
-                                        //   label: const Text('取消變更'),
-                                        //   onPressed: () {
-                                        //     Navigator.of(context).pop(); // Close the dialog
-                                        //     // Process the input values
-                                        //   },
-                                        // ),
                                         ElevatedButton.icon(
                                           icon: const Icon(Icons.check),
                                           label: const Text('輸入完成'),
@@ -209,17 +243,28 @@ class CreateCarPoolViewState extends State<CreateCarPoolView> {
                           _controller.complete(controller);
                         },
                         markers: {
-                          Marker(markerId: const MarkerId("start"), position: model.startPoint, infoWindow: const InfoWindow(title: "起點")),
-                          Marker(markerId: const MarkerId("end"), position: model.destination, infoWindow: const InfoWindow(title: "終點"))
+                          Marker(
+                              markerId: const MarkerId("current"),
+                              position: model.currentLocation,
+                              infoWindow: const InfoWindow(title: "目前位置"),
+                              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)),
+                          Marker(
+                              markerId: const MarkerId("start"),
+                              position: model.startPoint,
+                              infoWindow: const InfoWindow(title: "起點站"),
+                              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)),
+                          Marker(
+                              markerId: const MarkerId("end"),
+                              position: model.destination,
+                              infoWindow: const InfoWindow(title: "終點"),
+                              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange))
                         },
                         polylines: {Polyline(polylineId: const PolylineId("route"), points: model.mapRoute!.points, color: Colors.blue, width: 5)},
-                        // polylines: model.route.routes,
                       ),
                       Positioned(
                           top: 10,
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width * 0.95,
-                            // height: MediaQuery.of(context).size.height * 0.15,
                             child: Card(
                               elevation: 3.5,
                               child: Padding(
@@ -306,115 +351,6 @@ class CreateCarPoolViewState extends State<CreateCarPoolView> {
                   ),
                 ),
               ),
-      ),
-    );
-  }
-}
-
-class CarPoolCardWithMap extends StatefulWidget {
-  const CarPoolCardWithMap({super.key, required this.carPoolData});
-  final CarModel carPoolData;
-  @override
-  State<CarPoolCardWithMap> createState() => _CarPoolCardWithMapState();
-}
-
-class _CarPoolCardWithMapState extends State<CarPoolCardWithMap> {
-  Widget statusProvider(bool focus) {
-    Color iconColor = focus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary;
-    return Icon(Icons.location_pin, color: iconColor);
-  }
-
-  Widget informationDisplay(String title, String info) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(title,
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelLarge!
-                      .copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary, fontStyle: FontStyle.italic)),
-              const SizedBox(
-                width: 10,
-              ),
-              Text(info,
-                  style:
-                      Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary)),
-            ],
-          ),
-        ),
-        const Divider(
-          height: 10,
-          thickness: 2,
-        )
-      ],
-    );
-  }
-
-  String getStartTimeString(DateTime time) {
-    final checkFormatter = DateFormat('yyyy-MM-dd');
-    final formatter = DateFormat('MM-dd HH:mm');
-    final nowDate = checkFormatter.format(DateTime.now());
-    return nowDate == checkFormatter.format(time) ? "Today ${DateFormat("HH:mm").format(time)}" : formatter.format(time);
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                informationDisplay("房間名稱", "${widget.carPoolData.roomTitle}"),
-                informationDisplay("備註", "${widget.carPoolData.remark}"),
-                informationDisplay("出發點", "${widget.carPoolData.startLoc}"),
-                informationDisplay("目的地", "${widget.carPoolData.endLoc}"),
-                informationDisplay("預計出發時間", getStartTimeString(widget.carPoolData.startTime!)),
-                informationDisplay("預計到達時間", getStartTimeString(widget.carPoolData.endTime!)),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          elevation: 3.0,
-                          visualDensity: VisualDensity.compact,
-                          backgroundColor: Theme.of(context).colorScheme.secondary,
-                          foregroundColor: Theme.of(context).colorScheme.onSecondary,
-                        ),
-                        icon: const Icon(Icons.edit),
-                        label: const Text("修改資訊"),
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          // TODO : create new car pool
-                          debugPrint("create new car pool");
-                          Navigator.pop(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          elevation: 3.0,
-                          visualDensity: VisualDensity.compact,
-                          backgroundColor: Theme.of(context).colorScheme.primary,
-                          foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                        icon: const Icon(Icons.check),
-                        label: const Text("建立共乘"),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            )),
       ),
     );
   }

@@ -57,26 +57,6 @@ class MapAPIModel {
         response.results.first.geometry!.location.lng);
   }
 
-  Future getUserLocation() async {
-    Location location = Location();
-    bool serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        return;
-      }
-    }
-    // Check if permission is granted
-    PermissionStatus permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }
-    // debugPrint("${_serviceEnabled} ${_permissionGranted}");
-    return await location.getLocation();
-  }
 
   Future<MapRoute?> fetchRouts() async {
     // get routes points, duration, distance
