@@ -15,7 +15,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     grantLocationPermission();
-
     return MaterialApp(
       title: 'NCUBER',
       theme: ThemeData(
@@ -28,7 +27,6 @@ class MyApp extends StatelessWidget {
         '/map': (context) => const CreateCarPoolView(),
         '/dashboard': (context) => const DashboardView(),
       },
-      // home: const OuthView()
     );
   }
 }
