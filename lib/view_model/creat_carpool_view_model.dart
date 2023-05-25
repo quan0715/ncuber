@@ -1,4 +1,3 @@
-// TODO. multiple car actions
 import 'package:flutter/material.dart';
 import 'package:location/location.dart' as loc;
 import 'package:map_location_picker/map_location_picker.dart';
@@ -20,7 +19,6 @@ class CreateCarPoolViewModel extends ChangeNotifier {
   MapRoute? mapRoute = MapRoute(duration: const Duration(seconds: 0), distance: 0, points: []);
 
   // car model
-  
   DateTime get startTime => carModel.startTime ?? DateTime.now();
   DateTime get endTime => startTime.add(mapRoute?.duration ?? const Duration(seconds: 0));
 
@@ -33,7 +31,7 @@ class CreateCarPoolViewModel extends ChangeNotifier {
     endTime: DateTime.now(),
     startLoc: "",
     endLoc: "",
-    personsNumLimit: 4,
+    personNumLimit: 4,
     genderLimit: "性別不拘",
     status: CarStatus.notReady(),
   );
@@ -53,7 +51,7 @@ class CreateCarPoolViewModel extends ChangeNotifier {
 
   void updateNumberOfPeople(int index) {
     numberOfPeopleDropdownMenuIndex = index;
-    carModel.personsNumLimit = int.parse(numberOfPeopleLabel[index]);
+    carModel.personNumLimit = int.parse(numberOfPeopleLabel[index]);
     notifyListeners();
   }
 
