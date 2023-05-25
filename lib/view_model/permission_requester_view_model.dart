@@ -4,7 +4,7 @@ const requestPermissions = [Permission.location];
 
 Future<bool> grantLocationPermission() async {
   if (await Permission.location.request().isGranted) {
-    if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
+    if (await Permission.locationWhenInUse.request().isGranted) {
       return true;
     }
   }
