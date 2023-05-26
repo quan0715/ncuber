@@ -49,7 +49,7 @@ class _CarPoolCardState extends State<CarPoolCard> {
         label: Text(widget.carPoolData.status!.statusName));
   }
 
-  
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class _CarPoolCardState extends State<CarPoolCard> {
                 // car pool title display
                 Text(widget.carPoolData.roomTitle ?? '', style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
                 // car pool persons num display
-                Text('${widget.carPoolData.personUids.length} / ${widget.carPoolData.personsNumLimit}',
+                Text('${widget.carPoolData.personUids.length} / ${widget.carPoolData.personNumLimit}',
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
               ],
             ),

@@ -63,7 +63,7 @@ class _CarPoolButtonSheetViewState extends State<CarPoolButtonSheetView> {
                 informationDisplay("目的地", "${widget.carPoolData.endLoc}"),
                 informationDisplay("預計出發時間", getTimeString(widget.carPoolData.startTime!)),
                 informationDisplay("預計到達時間", getTimeString(widget.carPoolData.endTime!)),
-                informationDisplay("人數限制", "${widget.carPoolData.personsNumLimit}"),
+                informationDisplay("人數限制", "${widget.carPoolData.personNumLimit}"),
                 informationDisplay("性別限制", "${widget.carPoolData.genderLimit}"),
                 Padding(
                   padding: const EdgeInsets.all(4.0),

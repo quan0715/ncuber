@@ -92,7 +92,7 @@ class CarModel {
       startTime: DateTime.tryParse(json['startTime'] as String) as DateTime,
       startLoc: json['startLoc'] as String,
       endTime: DateTime.tryParse(json['endTime'] as String) as DateTime,
-      endLoc: json['ENDLoc'] as String,
+      endLoc: json['endLoc'] as String,
       personNumLimit: json['personNumLimit'] as int,
       genderLimit: json['genderLimit'] as String,
       personUids: json['uids'] as List<int>,
