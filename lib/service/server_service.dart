@@ -52,7 +52,7 @@ class ServerService {
 
   static Future<List<CarModel>> reqLastNumsOfCarModel(int numsOfCars) async {
     Map<String, dynamic> body = {
-      "type": "req_nums_of_carpool",
+      "type": "req_nums_of_car",
       "numbers": numsOfCars,
     };
 
@@ -61,7 +61,7 @@ class ServerService {
     if (json["type"] == body["type"]) {
       List<CarModel> carLists = [];
 
-      for (final car in json["carpools"]) {
+      for (final car in json["cars"]) {
         carLists.add(CarModel.fromJson(car));
       }
 
@@ -71,10 +71,10 @@ class ServerService {
     }
   }
 
-  static Future<CarModel> reqCarModelById(int carpoolId) async {
+  static Future<CarModel> reqCarModelById(int carId) async {
     Map<String, dynamic> body = {
-      "type": "req_carpool_by_id",
-      "carpoolId": carpoolId,
+      "type": "req_car_by_id",
+      "carId": carId,
     };
 
     var json = await postGet(body);
@@ -94,8 +94,8 @@ class ServerService {
       body["name"] = model.name;
     } else if (model.phone != null) {
       body["phone"] = model.phone;
-    } else if (model.studentId != null) {
-      body["studentId"] = model.studentId;
+    } else if (model.stuId != null) {
+      body["stuId"] = model.stuId;
     } else if (model.gender != null) {
       body["gender"] = model.gender;
     } else if (model.department != null) {
@@ -109,8 +109,7 @@ class ServerService {
     var json = await postGet(body);
 
     if (json["type"] == body["type"]) {
-      model.uid = json["personUid"] as int;
-      return model;
+      return PersonModel.fromJSON(json);
     } else {
       throw Exception('server return wrong type of model.');
     }
@@ -118,12 +117,12 @@ class ServerService {
 
   static Future<CarModel> sendCarModel(CarModel model) async {
     Map<String, dynamic> body = {
-      "type": "send_carpool",
+      "type": "send_car",
     };
     if (model.roomTitle != null) {
       body["roomTitle"] = model.roomTitle;
-    } else if (model.launchPersonUid != null) {
-      body['launchPersonUid'] = model.launchPersonUid;
+    } else if (model.launchStuId != null) {
+      body['launchPersonUid'] = model.launchStuId;
     } else if (model.remark != null) {
       body['remark'] = model.remark;
     } else if (model.startTime != null) {
@@ -145,8 +144,7 @@ class ServerService {
     var json = await postGet(body);
 
     if (json["type"] == body["type"]) {
-      model.carpoolId = json["carpoolId"] as int;
-      return model;
+      return CarModel.fromJson(json);
     } else {
       throw Exception('server return wrong type of model.');
     }
@@ -154,11 +152,11 @@ class ServerService {
 
   /// status: success/carFull/otherFail: 1/2/3
   static Future<int> addPersonToCar(
-      int personUid, int carpoolId) async {
+      int stuId, int carId) async {
     Map<String, dynamic> body = {
-      "type": "add_person_to_carpool",
-      "uid": personUid,
-      "carpoolId": carpoolId,
+      "type": "add_person_to_car",
+      "stuId": stuId,
+      "carId": carId,
     };
 
     var json = await postGet(body);
@@ -172,11 +170,11 @@ class ServerService {
 
   /// status: success/fail: 1/2
   static Future<int> rmPersonFromCar(
-      int personUid, int carpoolId) async {
+      int stuId, int carId) async {
     Map<String, dynamic> body = {
-      "type": "rm_person_from_carpool",
-      "uid": personUid,
-      "carpoolSsn": carpoolId,
+      "type": "rm_person_from_car",
+      "stuId": stuId,
+      "carId": carId,
     };
 
     var json = await postGet(body);
@@ -188,10 +186,10 @@ class ServerService {
     }
   }
 
-  static Future<PersonModel> reqPersonModelByUid(int uid) async {
+  static Future<PersonModel> reqPersonModelByUid(int stuId) async {
     Map<String, dynamic> body = {
-      "type": "req_person_by_uid",
-      "uid": uid,
+      "type": "req_person_by_stuId",
+      "stuId": stuId,
     };
 
     var json = await postGet(body);

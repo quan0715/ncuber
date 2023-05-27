@@ -25,14 +25,14 @@ class CreateCarPoolViewModel extends ChangeNotifier {
   String get roomTitle => carModel.roomTitle ?? "暫無房間名稱";
   String get roomRemark => carModel.remark ?? "無備註";
   List<String> numberOfPeopleLabel = const ["2", "3", "4", "5", "6", "7", "8"];
-  List<String> genderConstrainLabel = const ["限男性", "限女性", "性別不拘"];
+  List<String> genderConstrainLabel = const ["限男性", "限女性", "性別不拘"]; // FIXME. genderLimit use int so please use it as showing
   CarModel carModel = CarModel(
     startTime: DateTime.now(),
     endTime: DateTime.now(),
     startLoc: "",
     endLoc: "",
     personNumLimit: 4,
-    genderLimit: "性別不拘",
+    genderLimit: 2,
     status: CarStatus.notReady(),
   );
   // for view magic number
@@ -57,7 +57,7 @@ class CreateCarPoolViewModel extends ChangeNotifier {
 
   void updateGenderConstrainLabel(int index) {
     genderConstrainDropdownMenuIndex = index;
-    carModel.genderLimit = genderConstrainLabel[index];
+    carModel.genderLimit = index;
     notifyListeners();
   }
 

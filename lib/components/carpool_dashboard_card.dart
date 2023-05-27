@@ -68,7 +68,7 @@ class _CarPoolCardState extends State<CarPoolCard> {
                 // car pool title display
                 Text(widget.carPoolData.roomTitle ?? '', style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
                 // car pool persons num display
-                Text('${widget.carPoolData.personUids.length} / ${widget.carPoolData.personNumLimit}',
+                Text('${widget.carPoolData.personStuIds.length} / ${widget.carPoolData.personNumLimit}',
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
               ],
             ),
