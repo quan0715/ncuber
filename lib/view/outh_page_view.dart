@@ -24,8 +24,8 @@ class OuthView extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             // TODO : 串上 portal OAuth 認證 API 並取得 token
-            await PortalService.getPortalData();
-            // Navigator.pushNamed(context, '/dashboard');
+            // await PortalService.getPortalData();
+            Navigator.pushNamed(context, '/dashboard');
           },
           style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
           child: const Text('PORTAL 登入認證'),
