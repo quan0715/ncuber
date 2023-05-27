@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ncuber/view/create_carpool_view.dart';
 import 'package:ncuber/view/dashboard_view.dart';
 import 'package:ncuber/view/outh_page_view.dart';
+import 'package:ncuber/view/test_person_view.dart';
 import 'package:ncuber/view_model/permission_requester_view_model.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const OuthView(),
         '/map': (context) => const CreateCarPoolView(),
         '/dashboard': (context) => const DashboardView(),
+        '/test': (context) => TestPersonView(),
       },
     );
   }

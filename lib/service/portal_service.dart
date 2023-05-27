@@ -1,3 +1,7 @@
+/// FIXME: still not working
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:ncuber/model/person_model.dart';
@@ -56,12 +60,28 @@ class PortalService {
     var accessToken = resp?.accessToken;
     // debugPrint(resp?.scopes.toString());
 
-    String reqUri =
-        "$portalAuthEndpoint?response_type=$accessToken&scope=chinese-name+gender+student-id+academy-records+mobile-phone&client_id=$clientId&redirect_uri=$clientRedirectUri";
+    String reqUri = "https://portal.ncu.edu.tw/apis/oauth/v1/info";
 
-    final req = await http.post(Uri.parse(reqUri),headers:);
+    HttpClient httpClient = HttpClient();
+    HttpClientRequest request = await httpClient.getUrl(Uri.parse(reqUri));
+    request.headers.set('Accept', 'application/json');
+    request.headers.set('Authorization', "Bearer+$accessToken");
 
+    // debugPrint(jsonBody.toString());
+    // request.add(utf8.encode(jsonEncode(jsonBody)));
 
-    // debugPrint(req.body);
+    HttpClientResponse response = await request.close();
+
+    String reply = await response.transform(utf8.decoder).join();
+    debugPrint(response.headers.toString());
+    debugPrint(reply);
+    httpClient.close();
+
+    // final req = await http.post(Uri.parse(reqUri), headers: <String, String>{
+    //   'Accept': 'application/json',
+    //   'Authorization': 'Beater$accessToken'
+    // });
+
+    // debugPrint(req.headers.toString());
   }
 }

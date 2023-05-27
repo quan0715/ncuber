@@ -41,7 +41,7 @@ dependencies:
   google_maps_routes: ^1.1.2
   http: ^0.13.6
   flutter_polyline_points: ^1.0.0
-  encrypt: ^5.0.1
+  # encrypt: ^5.0.1
   permission_handler: ^10.2.0
   flutter_appauth: ^6.0.0
   # oauth2_client: ^3.2.1

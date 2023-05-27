@@ -1,51 +1,79 @@
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:http/http.dart' as http;
-import 'package:encrypt/encrypt.dart';
+import 'package:flutter/cupertino.dart' hide Key;
+// import 'package:encrypt/encrypt.dart';
 import 'package:ncuber/constants/constants.dart';
 import 'package:ncuber/model/car_model.dart';
 import 'package:ncuber/model/person_model.dart';
 
 /// Reference: https://www.liujunmin.com/flutter/provider/provider_mvvm.html
+/// Reference: https://stackoverflow.com/questions/57369129/flutter-http-post-request-error-invalid-media-type-expected
 class ServerService {
-  static var key = Key.fromUtf8(")J@NcRfUjXn2r5u8");
-  static var encrypter = Encrypter(AES(key));
+  // static var key = Key.fromUtf8(")J@NcRfUjXn2r5u8");
+  // static var iv = IV.fromUtf8(input)
+  // static var encrypter = Encrypter(AES(key));
 
-  static const Map<String, String> headers = {
-    'Content-Type': 'application/json; charset=UTF-8',
-    'clientId': SERVER_CLIENT_ID,
-  };
-  static String encryptedHeader = encrypt(headers);
+  // static String encryptedHeader = encrypt(headers);
 
   static Future<Map<String, dynamic>> postGet(
       Map<String, dynamic> jsonBody) async {
-    final resp = await http.post(Uri.parse(SERVER_URL),
-        headers: <String, String>{"Encrypted-Header": encryptedHeader},
-        body: encrypt(jsonBody));
+    // final resp = await http.post(Uri.parse(SERVER_URL),
+    //     headers: <String, String>{"Encrypted-Header": encryptedHeader},
+    //     body: encrypt(jsonBody));
+    HttpClient httpClient = HttpClient();
+    HttpClientRequest request = await httpClient.postUrl(Uri.parse(SERVER_URL));
+    request.headers.set('Content-Type', 'application/json; charset=UTF-8');
+    request.headers.set('clientId', SERVER_CLIENT_ID);
 
-    if (resp.statusCode == 200) {
-      String? unDecodedHeader = resp.headers['Encrypted-Header'];
-      Map<String, dynamic> realHeader = decrypt(unDecodedHeader!);
+    debugPrint(jsonBody.toString());
+    request.add(utf8.encode(jsonEncode(jsonBody)));
 
-      if (realHeader['clientId'] == SERVER_CLIENT_ID) {
-        String unDecodedBody = resp.body;
-        Map<String, dynamic> realBody = decrypt(unDecodedBody);
-        return realBody;
-      } else {
-        throw Exception('Server give wrong clientId');
-      }
+    HttpClientResponse response = await request.close();
+
+    String reply = await response.transform(utf8.decoder).join();
+
+    if (response.headers.value('clientId') == SERVER_CLIENT_ID) {
+      debugPrint(response.headers.toString());
+      debugPrint(reply);
+      httpClient.close();
+
+      return jsonDecode(reply);
     } else {
+      httpClient.close();
       throw Exception('Failed to post to server.');
     }
+
+    // String? unDecodedHeader = resp.headers['Encrypted-Header'];
+    // Map<String, dynamic> realHeader = decrypt(unDecodedHeader!);
+
+    // if (realHeader['clientId'] == SERVER_CLIENT_ID) {
+    //   String unDecodedBody = resp.body;
+    //   Map<String, dynamic> realBody = decrypt(unDecodedBody);
+    //   return realBody;
+    // } else {
+    //   throw Exception('Server give wrong clientId');
+    // }
+    // } else {
+    //   throw Exception('Failed to post to server.');
+    // }
   }
 
-  static String encrypt(Map<String, dynamic> json) {
-    return encrypter.encrypt(jsonEncode(json)).base64;
-  }
+  // static String encrypt(Map<String, dynamic> json) {
+  //   debugPrint("Ready to encrypt");
+  //   debugPrint(json.toString());
+  //   return encrypter.encrypt(jsonEncode(json)).base64;
+  // }
 
-  static Map<String, dynamic> decrypt(String msg) {
-    return jsonDecode(encrypter.decrypt(Encrypted.fromBase64(msg)));
-  }
+  // static Map<String, dynamic> decrypt(String msg) {
+  //   debugPrint("Before decrypt");
+  //   debugPrint(msg);
+  //   Map<String, dynamic> decrypted =
+  //       jsonDecode(encrypter.decrypt(Encrypted.fromBase64(msg)));
+  //   debugPrint("Ready to decrypt");
+  //   debugPrint(decrypted.toString());
+  //   return decrypted;
+  // }
 }
 
 /// --- server apis ---
@@ -184,10 +212,11 @@ Future<int> rmPersonFromCar(int stuId, int carId) async {
   }
 }
 
-Future<PersonModel> reqPersonModelByUid(int stuId) async {
+Future<PersonModel> reqPersonModelByStuIdAndName(String stuId, String name) async {
   Map<String, dynamic> body = {
-    "type": "req_person_by_stuId",
+    "type": "req_person_by_stuId_name",
     "stuId": stuId,
+    "name": name,
   };
 
   var json = await ServerService.postGet(body);
