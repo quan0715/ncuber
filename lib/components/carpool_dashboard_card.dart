@@ -19,7 +19,6 @@ class CarPoolCard extends StatelessWidget {
     );
   }
 
-<<<<<<< HEAD
   @override
   Widget build(BuildContext context) {
     return Consumer<CarpoolCardViewModel>(
@@ -106,62 +105,6 @@ class CarPoolCard extends StatelessWidget {
               ),
             ],
           ),
-=======
-  Widget getChip() {
-    Color color = Color(widget.carPoolData.status!.statusColor);
-    return Chip(
-        visualDensity: VisualDensity.compact,
-        backgroundColor: color.withOpacity(0.15),
-        avatar: CircleAvatar(
-          backgroundColor: color,
-          radius: 5,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide.none,
-        ),
-        side: BorderSide(color: color.withOpacity(0.2), width: 0),
-        labelStyle: Theme.of(context).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.bold, color: color),
-        label: Text(widget.carPoolData.status!.statusName));
-  }
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 3.5,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 14),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            getChip(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // car pool title display
-                Text(widget.carPoolData.roomTitle ?? '', style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
-                // car pool persons num display
-                Text('${widget.carPoolData.personStuIds.length} / ${widget.carPoolData.personNumLimit}',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
-              ],
-            ),
-            const Divider(),
-            // Time display
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // car pool start time display
-                getTimeLocDisplay(time: widget.carPoolData.startTime!, loc: widget.carPoolData.startLoc!),
-                const Icon(Icons.arrow_forward),
-                // car pool end time display
-                getTimeLocDisplay(time: widget.carPoolData.endTime!, loc: widget.carPoolData.endLoc!),
-              ],
-            ),
-          ],
->>>>>>> 8680f2fe50b9ce6c31dbb2780e90cfd9bf51e571
         ),
       ),
     );

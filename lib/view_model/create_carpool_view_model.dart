@@ -22,10 +22,6 @@ class CreateCarPoolViewModel extends ChangeNotifier {
   bool showButtomSheet = false;
 
   // car model
-<<<<<<< HEAD:lib/view_model/create_carpool_view_model.dart
-
-=======
->>>>>>> 8680f2fe50b9ce6c31dbb2780e90cfd9bf51e571:lib/view_model/creat_carpool_view_model.dart
   DateTime get startTime => carModel.startTime ?? DateTime.now();
   DateTime get endTime => startTime.add(mapRoute?.duration ?? const Duration(seconds: 0));
 
@@ -41,7 +37,7 @@ class CreateCarPoolViewModel extends ChangeNotifier {
     startLoc: "",
     endLoc: "",
     personNumLimit: 4,
-    genderLimit: 2,
+    genderLimit: 1,
     status: CarStatus.notReady(),
   );
   // for view magic number
@@ -78,7 +74,7 @@ class CreateCarPoolViewModel extends ChangeNotifier {
 
   void updateGenderConstrainLabel(int index) {
     genderConstrainDropdownMenuIndex = index;
-    carModel.genderLimit = index;
+    carModel.genderLimit = genderConstrainDropdownMenuIndex;
     notifyListeners();
   }
 

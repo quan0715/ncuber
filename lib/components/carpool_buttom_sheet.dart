@@ -93,7 +93,7 @@ class CarPoolButtomSheetView extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: RawChip(avatar: const Icon(Icons.people), label: Text("人數限制 ${model.carModel.personsNumLimit}")),
+                        child: RawChip(avatar: const Icon(Icons.people), label: Text("人數限制 ${model.carModel.personNumLimit}")),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(4.0),

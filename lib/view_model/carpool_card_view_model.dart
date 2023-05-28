@@ -13,7 +13,7 @@ class CarpoolCardViewModel extends ChangeNotifier {
     return nowDate == checkFormatter.format(time) ? "Today ${DateFormat("HH:mm").format(time)}" : formatter.format(time);
   }
 
-  String get getTitleString => "${carModel.roomTitle} (${carModel.personUids.length} / ${carModel.personsNumLimit})";
+  String get getTitleString => "${carModel.roomTitle} (${carModel.personStuIds.length} / ${carModel.personNumLimit})";
   String get startTimeString => getTimeString(carModel.startTime ?? DateTime.now());
   String get endTimeString => getTimeString(carModel.endTime ?? DateTime.now());
 

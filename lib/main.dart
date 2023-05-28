@@ -4,7 +4,6 @@ import 'package:ncuber/view/dashboard_view.dart';
 import 'package:ncuber/view/outh_page_view.dart';
 import 'package:ncuber/view/test_person_view.dart';
 import 'package:ncuber/view_model/permission_requester_view_model.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
