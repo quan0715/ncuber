@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:ncuber/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +37,13 @@ class _OuthViewState extends State<OuthView> {
       ),
     );
   }
+=======
+import 'package:ncuber/model/person_model.dart';
+import 'package:ncuber/service/portal_service.dart';
+
+class OuthView extends StatelessWidget {
+  const OuthView({Key? key}) : super(key: key);
+>>>>>>> 8680f2fe50b9ce6c31dbb2780e90cfd9bf51e571
 
   final NCUColor = const Color(0XFFF8C460);
 
@@ -114,6 +122,7 @@ class _OuthViewState extends State<OuthView> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(children: [
+<<<<<<< HEAD
           Positioned.fill(
             child: Align(
               alignment: Alignment.center,
@@ -163,5 +172,30 @@ class _OuthViewState extends State<OuthView> {
               )),
           Positioned(right: -190, bottom: 0, child: Image.asset("assets/images/y_car.png", width: 320))
         ]));
+=======
+      Center(
+        child: RichText(
+            text: TextSpan(
+                text: 'NCU',
+                style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
+                children: <TextSpan>[
+              TextSpan(text: 'BER', style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary))
+            ])),
+      ),
+      Positioned(
+        bottom: MediaQuery.of(context).size.height * 0.2,
+        left: MediaQuery.of(context).size.width * 0.32,
+        child: ElevatedButton(
+          onPressed: () {
+            // TODO : 串上 portal OAuth 認證 API 並取得 token
+            // PortalService.getPortalData();
+            Navigator.pushNamed(context, '/dashboard');
+          },
+          style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
+          child: const Text('PORTAL 登入認證'),
+        ),
+      )
+    ]));
+>>>>>>> 8680f2fe50b9ce6c31dbb2780e90cfd9bf51e571
   }
 }

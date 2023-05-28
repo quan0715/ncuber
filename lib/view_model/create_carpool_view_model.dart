@@ -22,14 +22,17 @@ class CreateCarPoolViewModel extends ChangeNotifier {
   bool showButtomSheet = false;
 
   // car model
+<<<<<<< HEAD:lib/view_model/create_carpool_view_model.dart
 
+=======
+>>>>>>> 8680f2fe50b9ce6c31dbb2780e90cfd9bf51e571:lib/view_model/creat_carpool_view_model.dart
   DateTime get startTime => carModel.startTime ?? DateTime.now();
   DateTime get endTime => startTime.add(mapRoute?.duration ?? const Duration(seconds: 0));
 
   String? get roomTitle => carModel.roomTitle;
   String? get roomRemark => carModel.remark;
   List<String> numberOfPeopleLabel = const ["2", "3", "4", "5", "6", "7", "8"];
-  List<String> genderConstrainLabel = const ["限男性", "限女性", "性別不拘"];
+  List<String> genderConstrainLabel = const ["限男性", "限女性", "性別不拘"]; // FIXME. genderLimit use int so please use it as showing
   CarModel carModel = CarModel(
     roomTitle: "",
     remark: "",
@@ -37,8 +40,8 @@ class CreateCarPoolViewModel extends ChangeNotifier {
     endTime: DateTime.now(),
     startLoc: "",
     endLoc: "",
-    personsNumLimit: 4,
-    genderLimit: "性別不拘",
+    personNumLimit: 4,
+    genderLimit: 2,
     status: CarStatus.notReady(),
   );
   // for view magic number
@@ -69,13 +72,13 @@ class CreateCarPoolViewModel extends ChangeNotifier {
 
   void updateNumberOfPeople(int index) {
     numberOfPeopleDropdownMenuIndex = index;
-    carModel.personsNumLimit = int.parse(numberOfPeopleLabel[index]);
+    carModel.personNumLimit = int.parse(numberOfPeopleLabel[index]);
     notifyListeners();
   }
 
   void updateGenderConstrainLabel(int index) {
     genderConstrainDropdownMenuIndex = index;
-    carModel.genderLimit = genderConstrainLabel[index];
+    carModel.genderLimit = index;
     notifyListeners();
   }
 

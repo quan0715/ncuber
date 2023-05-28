@@ -57,6 +57,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.183089429196-us4i4m87tkmtdsetk5c0gg3klh6f8s7v</string>
+				<!-- <string>com.example.ncuber</string> -->
 			</array>
 		</dict>
 	</array>
