@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart' as loc;
 import 'package:map_location_picker/map_location_picker.dart';
 import 'package:ncuber/model/car_model.dart';
@@ -13,21 +14,25 @@ class CreateCarPoolViewModel extends ChangeNotifier {
   bool isDestinationTextFieldFocused = false;
   LatLng get startPoint => mapApi.startPointLatLng ?? currentLocation;
   LatLng get destination => mapApi.destinationLatLng ?? currentLocation;
+  bool get canDrawRoute => mapApi.startPointLatLng != null && mapApi.destinationLatLng!=null;
   String get startAddress => mapApi.startPointAddress ?? "";
   String get destinationAddress => mapApi.destinationAddress ?? "";
   LatLng currentLocation = const LatLng(24.96720974492558, 121.18772026151419);
   MapRoute? mapRoute = MapRoute(duration: const Duration(seconds: 0), distance: 0, points: []);
+  bool showButtomSheet = false;
 
   // car model
-  
+
   DateTime get startTime => carModel.startTime ?? DateTime.now();
   DateTime get endTime => startTime.add(mapRoute?.duration ?? const Duration(seconds: 0));
 
-  String get roomTitle => carModel.roomTitle ?? "暫無房間名稱";
-  String get roomRemark => carModel.remark ?? "無備註";
+  String? get roomTitle => carModel.roomTitle;
+  String? get roomRemark => carModel.remark;
   List<String> numberOfPeopleLabel = const ["2", "3", "4", "5", "6", "7", "8"];
   List<String> genderConstrainLabel = const ["限男性", "限女性", "性別不拘"];
   CarModel carModel = CarModel(
+    roomTitle: "",
+    remark: "",
     startTime: DateTime.now(),
     endTime: DateTime.now(),
     startLoc: "",
@@ -39,6 +44,15 @@ class CreateCarPoolViewModel extends ChangeNotifier {
   // for view magic number
   int numberOfPeopleDropdownMenuIndex = 2;
   int genderConstrainDropdownMenuIndex = 2;
+  String getTimeString(DateTime time) {
+    final checkFormatter = DateFormat('yyyy-MM-dd');
+    final formatter = DateFormat('MM-dd HH:mm');
+    final nowDate = checkFormatter.format(DateTime.now());
+    return nowDate == checkFormatter.format(time) ? "Today ${DateFormat("HH:mm").format(time)}" : formatter.format(time);
+  }
+
+  String get startTimeString => getTimeString(startTime);
+  String get endTimeString => getTimeString(endTime);
 
   void updateRoomTitle(String title) {
     carModel.roomTitle = title;
@@ -49,6 +63,9 @@ class CreateCarPoolViewModel extends ChangeNotifier {
     carModel.remark = remark;
     notifyListeners();
   }
+
+  String? roomTitleValidator(String? value) => roomTitle!.isEmpty || roomTitle!.length > 10 ? "名稱不得為空或超過10個字元" : null;
+  String? remarkValidator(String? value) => null;
 
   void updateNumberOfPeople(int index) {
     numberOfPeopleDropdownMenuIndex = index;
@@ -147,6 +164,16 @@ class CreateCarPoolViewModel extends ChangeNotifier {
   void onDestinationTextFieldFocused() {
     isDestinationTextFieldFocused = true;
     isStartPointTextFieldFocused = false;
+    notifyListeners();
+  }
+
+  void checkSchdule() {
+    showButtomSheet = true;
+    notifyListeners();
+  }
+
+  void closeButtomSheet() {
+    showButtomSheet = false;
     notifyListeners();
   }
 }

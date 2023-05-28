@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ncuber/view/dashboard_ncuber.dart';
 import 'package:ncuber/view/dashboard_user_log.dart';
+import 'package:ncuber/view_model/user_view_model.dart';
+import 'package:provider/provider.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -10,50 +12,30 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<DashboardView> {
-  int selectedIndex = 0;
   final pages = <Widget>[
     const DashboardNcUber(),
-    const UserLog(),
-    const UserLog(),
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('NCUBER'),
-        automaticallyImplyLeading: false,
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        label: const Text('發起共乘'),
-        icon: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.pushNamed(context, '/map');
-        },
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: selectedIndex,
-        onDestinationSelected: (index) {
-          debugPrint(index.toString());
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.car_crash),
-            label: 'NCUber',
+    return ChangeNotifierProvider<UserViewModel>.value(
+      value: ModalRoute.of(context)!.settings.arguments as UserViewModel,
+      child: Consumer<UserViewModel>(
+        builder: (context, model, child) => Scaffold(
+          appBar: AppBar(
+            title: const Text('NCUBER'),
+            automaticallyImplyLeading: false,
           ),
-          NavigationDestination(
-            icon: Icon(Icons.person),
-            label: '我的共乘',
+          floatingActionButton: FloatingActionButton.extended(
+            label: const Text('發起共乘'),
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.pushNamed(context, '/map');
+            },
           ),
-          NavigationDestination(
-            icon: Icon(Icons.history),
-            label: '歷程紀錄',
-          ),
-        ],
+          // TODO: check if person have join cardpool show carpool otherwise show dashboard
+          body: model.isJoinCarpoolRoom ? const DashboardNcUber() : const DashboardNcUber(),
+        ),
       ),
-      body: pages[selectedIndex],
     );
   }
 }
