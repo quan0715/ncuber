@@ -87,7 +87,7 @@ class CarModel {
     var carModel = CarModel(
       carId: json['carId'] as int,
       roomTitle: json['roomTitle'] as String,
-      launchStuId: json['launchStuId'] as String,
+      launchStuId: (json['launchStuId'] as int).toString(),
       remark: json['remark'] as String,
       startTime: DateTime.tryParse(json['startTime'] as String) as DateTime,
       startLoc: json['startLoc'] as String,
@@ -95,7 +95,7 @@ class CarModel {
       endLoc: json['endLoc'] as String,
       personNumLimit: json['personNumLimit'] as int,
       genderLimit: json['genderLimit'] as int,
-      personStuIds: json['stuIds'] as List<String>,
+      personStuIds: (json['stuIds'] as List).map((studentId)=>studentId.toString()).toList(),
     );
 
     carModel.statusCheck();

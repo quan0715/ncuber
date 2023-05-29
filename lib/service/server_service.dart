@@ -17,8 +17,7 @@ class ServerService {
   static const serverClientId = "iBTFJjVUJQ7uZa4MVLXRcM2WLN6S1P";
   static const serverBaseUrl = 'https://ncuber.pythonanywhere.com';
 
-  static Future<Map<String, dynamic>> postGet(
-      Map<String, dynamic> jsonBody, Uri apiUri) async {
+  static Future<Map<String, dynamic>> postGet(Map<String, dynamic> jsonBody, Uri apiUri) async {
     // final resp = await http.post(Uri.parse(SERVER_URL),
     //     headers: <String, String>{"Encrypted-Header": encryptedHeader},
     //     body: encrypt(jsonBody));
@@ -27,12 +26,12 @@ class ServerService {
     request.headers.set('Content-Type', 'application/json; charset=UTF-8');
     request.headers.set('clientId', serverClientId);
 
-    debugPrint(jsonBody.toString());
+    // debugPrint(jsonBody.toString());
     request.add(utf8.encode(jsonEncode(jsonBody)));
 
     HttpClientResponse response = await request.close();
-
     String reply = await response.transform(utf8.decoder).join();
+    debugPrint(reply.toString());
     return jsonDecode(reply);
     // debugPrint(reply);
     // if (response.headers.value('clientId') == serverClientId) {
@@ -83,25 +82,26 @@ class ServerService {
 
 Future<List<CarModel>> reqLastNumsOfCarModel(int numsOfCars) async {
   Map<String, dynamic> body = {
-    "type": "req_nums_of_car",
+    "type": "req_nums_of_cars",
     "numbers": numsOfCars,
   };
 
   Uri apiUri = Uri.parse("${ServerService.serverBaseUrl}/req_latest_nums_of_carModel");
 
   var json = await ServerService.postGet(body, apiUri);
+  debugPrint(json.toString());
 
-  if (json["type"] == body["type"]) {
-    List<CarModel> carLists = [];
+  // if (json["type"] == body["type"]) {
+  List<CarModel> carLists = [];
 
-    for (final car in json["cars"]) {
-      carLists.add(CarModel.fromJson(car)..statusCheck());
-    }
-
-    return carLists;
-  } else {
-    throw Exception('server return wrong type of model.');
+  for (final car in json["cars"]) {
+    carLists.add(CarModel.fromJson(car)..statusCheck());
   }
+
+  return carLists;
+  // } else {
+  // throw Exception('server return wrong type of model.');
+  // }
 }
 
 Future<CarModel> reqCarModelById(int carId) async {
@@ -160,7 +160,7 @@ Future<CarModel> sendCarModel(CarModel model) async {
   // if (model.roomTitle != null) {
   body["roomTitle"] = model.roomTitle;
   // } else if (model.launchStuId != null) {
-  body['launchPersonUid'] = model.launchStuId;
+  body['launchStuId'] = model.launchStuId;
   // } else if (model.remark != null) {
   body['remark'] = model.remark;
   // } else if (model.startTime != null) {
@@ -179,8 +179,7 @@ Future<CarModel> sendCarModel(CarModel model) async {
   //   throw Exception("null content before sending car model");
   // }
 
-  // TODO. backend undone
-  Uri apiUri = Uri.parse("${ServerService.serverBaseUrl}/req_latest_nums_if_carModel");
+  Uri apiUri = Uri.parse("${ServerService.serverBaseUrl}/send_car_model");
 
   var json = await ServerService.postGet(body, apiUri);
 
@@ -229,8 +228,7 @@ Future<int> rmPersonFromCar(String stuId, int carId) async {
   }
 }
 
-Future<PersonModel> reqPersonModelByStuIdAndName(
-    String stuId, String name) async {
+Future<PersonModel> reqPersonModelByStuIdAndName(String stuId, String name) async {
   Map<String, dynamic> body = {
     "type": "req_person_by_stuId_name",
     "stuId": stuId,

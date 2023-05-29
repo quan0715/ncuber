@@ -8,7 +8,7 @@ class UserViewModel extends ChangeNotifier {
   String? studentId = "";
   bool get isJoinCarpoolRoom => currentCarModel != null;
   CarModel? currentCarModel;
-  int? readyToGetCarId;
+  int? get readyToGetCarId => personModel.nowCarId;
 
   void onNameChange(String value) {
     userName = value;
@@ -22,12 +22,9 @@ class UserViewModel extends ChangeNotifier {
 
   String? nameValidator(String? value) => userName!.isEmpty ? "請輸入姓名" : null;
   String? studentIdValidator(String? value) => studentId!.length != 9 ? "請輸入正確學號" : null;
-
+  PersonModel personModel = PersonModel();
   Future<bool> login() async {
-    PersonModel personModel =
-        await sendPersonModel(PersonModel(stuId: studentId, name: userName));
-    readyToGetCarId = personModel.nowCarId;
-
+    personModel = await sendPersonModel(PersonModel(stuId: studentId, name: userName));
     try {
       await getCurrentCarModel();
       return true;
@@ -41,10 +38,8 @@ class UserViewModel extends ChangeNotifier {
     // check whether user have join carpool
     // if true then get carpool data
     // else set carpool data to null and
-    if (studentId == null || userName == null) {
-      throw Exception("Please input student_id & name.");
-    }
-
+    personModel = await sendPersonModel(PersonModel(stuId: studentId, name: userName));
+    debugPrint(personModel.nowCarId!.toString());
     if (readyToGetCarId != null) {
       currentCarModel = await reqCarModelById(readyToGetCarId!);
       // currentCarModel = CarModel(
@@ -70,39 +65,41 @@ class UserViewModel extends ChangeNotifier {
     model.launchStuId = studentId!;
     // model.personStuIds.add(studentId!);
     model = await sendCarModel(model);
-    assert(model.personStuIds.contains(studentId!) == true);
+    debugPrint('$studentId ${model.carId}');
+    await addPersonToCar(studentId!, model.carId!);
+    // assert(model.personStuIds.contains(studentId!) == true);
 
-    currentCarModel = model;
+    await getCurrentCarModel();
     notifyListeners();
   }
 
   Future joinCarPool(CarModel model) async {
     // for user join carpool
-    // int status = await addPersonToCar(studentId!, model.carId!);
-    // switch (status) {
-    //   case 1:
-    //     {
-    //       debugPrint("join car successfully.");
+    int status = await addPersonToCar(studentId!, model.carId!);
+    switch (status) {
+      case 1:
+        {
+          debugPrint("join car successfully.");
           model.personStuIds.add(studentId!);
           currentCarModel = model;
           notifyListeners();
-    //       break;
-    //     }
-    //   case 2:
-    //     {
-    //       debugPrint("the car fulled.");
-    //       break;
-    //     }
-    //   case 3:
-    //     {
-    //       debugPrint("the car has been destroyed.");
-    //       break;
-    //     }
-    //   default:
-    //     {
-    //       throw Exception("Server join car other error.");
-    //     }
-    // }
+          break;
+        }
+      case 2:
+        {
+          debugPrint("the car fulled.");
+          break;
+        }
+      case 3:
+        {
+          debugPrint("the car has been destroyed.");
+          break;
+        }
+      default:
+        {
+          throw Exception("Server join car other error.");
+        }
+    }
   }
 
   Future leaveCarPool() async {
