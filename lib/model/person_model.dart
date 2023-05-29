@@ -6,7 +6,7 @@ class PersonModel {
   String? name; //名字
   String? phone; // 手機
   String? stuId; // 學號
-  int? gender; // 性別 // 1:男 2:女
+  int? gender; // 性別 // 1:男 2:女 // 0: not set
   String? department; // 就讀學位名
   String? grade; // 年級
 
@@ -14,11 +14,11 @@ class PersonModel {
     this.carIdHists = const [],
     this.nowCarId,
     this.name,
-    this.phone,
+    this.phone ="",
     this.stuId,
-    this.gender,
-    this.department,
-    this.grade,
+    this.gender = 0,
+    this.department = "",
+    this.grade = "",
   });
 
   factory PersonModel.fromJSON(Map<String, dynamic> json) => PersonModel(

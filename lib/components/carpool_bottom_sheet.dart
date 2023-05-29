@@ -131,7 +131,6 @@ class CarPoolBottomSheetView extends StatelessWidget {
                           child: user.isJoinCarpoolRoom
                               ? ElevatedButton.icon(
                                   onPressed: () async {
-                                    // TODO 離開房間
                                     await user.leaveCarPool();
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -145,7 +144,6 @@ class CarPoolBottomSheetView extends StatelessWidget {
                                 )
                               : ElevatedButton.icon(
                                   onPressed: () async{
-                                    // TODO 加入共乘
                                     await user.joinCarPool(model.carModel);
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -160,7 +158,7 @@ class CarPoolBottomSheetView extends StatelessWidget {
                         ),
                       ],
                     )
-                    
+
                   ],
                 )),
           ),

@@ -31,7 +31,6 @@ class CreateCarPoolViewModel extends ChangeNotifier {
   String? get roomRemark => carModel.remark;
   List<String> numberOfPeopleLabel = const ["2", "3", "4", "5", "6", "7", "8"];
   List<String> genderConstrainLabel = const ["限男性", "限女性", "性別不拘"];
-  // FIXME. genderLimit use int so please use it as showing
   CarModel carModel = CarModel(
     startTime: DateTime.now(),
     endTime: DateTime.now(),
@@ -45,7 +44,6 @@ class CreateCarPoolViewModel extends ChangeNotifier {
   int numberOfPeopleDropdownMenuIndex = 2;
   int genderConstrainDropdownMenuIndex = 2;
   String getTimeString(DateTime time) {
-    
     final nowDate = checkFormatter.format(DateTime.now());
     return nowDate == checkFormatter.format(time) ? "Today ${DateFormat("HH:mm").format(time)}" : formatter.format(time);
   }
@@ -115,7 +113,7 @@ class CreateCarPoolViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  String? startPointValidator(String? value) => startAddress.isEmpty ? "輸入不可為空" : null;  
+  String? startPointValidator(String? value) => startAddress.isEmpty ? "輸入不可為空" : null;
   String? destinationPointValidator(String? value) => destinationAddress.isEmpty ? "輸入不可為空" : null;
 
   Future getUserLocation() async {

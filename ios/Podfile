@@ -41,7 +41,6 @@ post_install do |installer|
     # Start of the permission_handler configuration
     target.build_configurations.each do |config|
 
-      # FIXME. @quan0715 你看一下 ios 還需要哪些權限
       # You can enable the permissions needed here. For example to enable camera
       # permission, just remove the `#` character in front so it looks like this:
       #

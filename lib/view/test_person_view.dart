@@ -35,7 +35,6 @@ class TestPersonViewState extends State<TestPersonView> {
       department: _tffControllers[4].text,
       grade: _tffControllers[5].text,
     );
-    // FIXME: only send name
     await sendPersonModel(personModel);
   }
 
