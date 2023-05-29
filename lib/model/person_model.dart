@@ -1,5 +1,5 @@
 class PersonModel {
-  List<int>? carIdHists; // 併車紀錄
+  List? carIdHists; // 併車紀錄
   int? nowCarId;
 
   // from portal
@@ -22,7 +22,7 @@ class PersonModel {
   });
 
   factory PersonModel.fromJSON(Map<String, dynamic> json) => PersonModel(
-        carIdHists: json['carIdHists'] as List<int>,
+        carIdHists: json['carIdHists'] as List,
         nowCarId: json['nowCarId'] as int?,
         name: json['name'] as String,
         phone: json['phone'] as String,

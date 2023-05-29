@@ -61,7 +61,7 @@ class CreateCarPoolViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  String? roomTitleValidator(String? value) => (roomTitle!.isEmpty || roomTitle!.length > 10) ? "名稱不得為空或超過10個字元" : null;
+  String? roomTitleValidator(String? value) => (roomTitle == null || roomTitle!.isEmpty || roomTitle!.length > 10) ? "名稱不得為空或超過10個字元" : null;
   String? remarkValidator(String? value) => null;
 
   void updateNumberOfPeople(int index) {

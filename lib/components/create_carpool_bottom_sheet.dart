@@ -12,10 +12,10 @@ class CreateCarpoolBottomSheet extends StatefulWidget {
   @override
   State<CreateCarpoolBottomSheet> createState() => _CreateCarpoolBottomSheetState();
 }
+
 final formKey = GlobalKey<FormState>();
 
 class _CreateCarpoolBottomSheetState extends State<CreateCarpoolBottomSheet> {
-  
   Future moveCamera(LatLng target, CreateCarPoolViewModel model) async {
     // final point = CameraPosition(target: target, tilt: 0, zoom: 18);
     final GoogleMapController controller = await widget.mapController.future;
@@ -27,6 +27,7 @@ class _CreateCarpoolBottomSheetState extends State<CreateCarpoolBottomSheet> {
     }
     // controller.
   }
+
   Future moveBoundBox(CreateCarPoolViewModel model) async {
     LatLng point1 = model.startPoint;
     LatLng point2 = model.destination;
@@ -42,14 +43,15 @@ class _CreateCarpoolBottomSheetState extends State<CreateCarpoolBottomSheet> {
     }
 
     final GoogleMapController controller = await widget.mapController.future;
-    await controller.moveCamera(CameraUpdate.newLatLngBounds(bounds, 30.0));
+    await controller.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50.0));
   }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<CreateCarPoolViewModel>(
       builder: (context, model, child) => SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
           child: Form(
             key: formKey,
             child: Padding(
@@ -87,11 +89,13 @@ class _CreateCarpoolBottomSheetState extends State<CreateCarpoolBottomSheet> {
                                       onPressed: () async {
                                         if (formKey.currentState!.validate()) {
                                           // TODO: implement create car pool
-                                          await user.createNewCarModel(model.carModel);
-                                          if (mounted) {
-                                            Navigator.pop(context);
+                                          if (model.canDrawRoute && model.mapRoute != null) {
+                                            await user.createNewCarModel(model.carModel);
+                                            if (mounted) {
+                                              Navigator.pop(context);
+                                            }
+                                            debugPrint("create new carpool");
                                           }
-                                          debugPrint("create new carpool");
                                         }
                                       },
                                       icon: const Icon(Icons.check),
@@ -104,8 +108,10 @@ class _CreateCarpoolBottomSheetState extends State<CreateCarpoolBottomSheet> {
                               onChanged: model.updateRemark,
                               validator: model.remarkValidator,
                               decoration: const InputDecoration(
-                                // label: Text("共乘須知"), 
-                              hintText: "輸入備註", border: InputBorder.none, isDense: true),
+                                  // label: Text("共乘須知"),
+                                  hintText: "輸入備註",
+                                  border: InputBorder.none,
+                                  isDense: true),
                               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                         ],
                       ),
@@ -199,7 +205,9 @@ class _CreateCarpoolBottomSheetState extends State<CreateCarpoolBottomSheet> {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surfaceVariant, shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(10.0)),
+                            color: Theme.of(context).colorScheme.surfaceVariant,
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(10.0)),
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Column(

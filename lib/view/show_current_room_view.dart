@@ -15,22 +15,9 @@ class ShowCurrentCarpoolView extends StatefulWidget {
 
 class ShowCurrentCarpoolViewState extends State<ShowCurrentCarpoolView> {
   final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
-
-  Future moveCamera(LatLng target, CreateCarPoolViewModel model) async {
-    // final point = CameraPosition(target: target, tilt: 0, zoom: 18);
-    final GoogleMapController controller = await _controller.future;
-    // await controller.animateCamera(CameraUpdate.newCameraPosition(point));
-    await controller.animateCamera(CameraUpdate.newLatLng(target));
-    await Future.delayed(const Duration(seconds: 1));
-    if (model.canDrawRoute) {
-      await moveBoundBox(model);
-    }
-    // controller.
-  }
-
-  Future moveBoundBox(CreateCarPoolViewModel model) async {
-    LatLng point1 = model.startPoint;
-    LatLng point2 = model.destination;
+  Future moveBoundBox(CarpoolCardViewModel model) async {
+    LatLng point1 = model.startPointLatLng;
+    LatLng point2 = model.destinationLatLng;
     LatLngBounds? bounds;
     if (point1.latitude <= point2.latitude) {
       bounds = LatLngBounds(southwest: point1, northeast: point2);
@@ -44,16 +31,14 @@ class ShowCurrentCarpoolViewState extends State<ShowCurrentCarpoolView> {
     final GoogleMapController controller = await _controller.future;
     await controller.moveCamera(CameraUpdate.newLatLngBounds(bounds, 30.0));
   }
-
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Consumer<CarpoolCardViewModel>(
-      builder: (context, model, child) => 
-          model.isLoading
+      builder: (context, model, child) => model.isLoading
           ? const Center(child: CircularProgressIndicator())
           : Scaffold(
-            floatingActionButton: null,
+              floatingActionButton: null,
               body: Column(
                 children: [
                   Expanded(
@@ -63,8 +48,9 @@ class ShowCurrentCarpoolViewState extends State<ShowCurrentCarpoolView> {
                       myLocationButtonEnabled: true,
                       mapType: MapType.normal,
                       initialCameraPosition: CameraPosition(target: model.startPointLatLng, zoom: 19.151926040649414),
-                      onMapCreated: (GoogleMapController controller) {
+                      onMapCreated: (GoogleMapController controller) async{
                         _controller.complete(controller);
+                        await moveBoundBox(model);
                       },
                       markers: {
                         Marker(
@@ -90,13 +76,14 @@ class ShowCurrentCarpoolViewState extends State<ShowCurrentCarpoolView> {
                     ),
                   ),
                   Expanded(
-                    flex:1, child: ChangeNotifierProvider<CarpoolCardViewModel>.value(
-                      value: model, child: BottomSheet(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                        clipBehavior: Clip.hardEdge,
-                        onClosing: (){},
-                        builder: (context) => const CarPoolBottomSheetView()))
-                  ),
+                      flex: 1,
+                      child: ChangeNotifierProvider<CarpoolCardViewModel>.value(
+                          value: model,
+                          child: BottomSheet(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                              clipBehavior: Clip.hardEdge,
+                              onClosing: () {},
+                              builder: (context) => CarPoolBottomSheetView(mapController: _controller)))),
                 ],
               ),
             ),

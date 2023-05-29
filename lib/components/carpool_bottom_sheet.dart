@@ -1,11 +1,25 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ncuber/components/status_chip.dart';
 import 'package:ncuber/view_model/carpool_card_view_model.dart';
 import 'package:ncuber/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 class CarPoolBottomSheetView extends StatelessWidget {
-  const CarPoolBottomSheetView({super.key});
+  const CarPoolBottomSheetView({super.key, this.mapController});
+  final Completer<GoogleMapController>? mapController;
+
+  Future moveCamera(LatLng target, CarpoolCardViewModel model) async {
+    // final point = CameraPosition(target: target, tilt: 0, zoom: 18);
+    final GoogleMapController controller = await mapController!.future;
+    // await controller.animateCamera(CameraUpdate.newCameraPosition(point));
+    await controller.animateCamera(CameraUpdate.newLatLng(target));
+    // await Future.delayed(const Duration(seconds: 1));
+    // controller.
+  }
+
   Widget getTimeLocDisplay({required String time, required String loc}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -43,7 +57,8 @@ class CarPoolBottomSheetView extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: Text(model.carModel.remark!, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary)),
+                          child: Text(model.carModel.remark!,
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary)),
                         ),
                       ],
                     ),
@@ -64,7 +79,9 @@ class CarPoolBottomSheetView extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10,),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                      ),
                       child: Container(
                         decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.surface, shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(10.0)),
@@ -75,36 +92,50 @@ class CarPoolBottomSheetView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 8,
-                                    backgroundColor: Theme.of(context).colorScheme.primary,
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  getTimeLocDisplay(time: model.startTimeString, loc: model.carModel.startLoc!),
-                                ],
+                              MaterialButton(
+                                onPressed: () {
+                                  if (mapController != null) {
+                                    moveCamera(model.startPointLatLng, model);
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 8,
+                                      backgroundColor: Theme.of(context).colorScheme.primary,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    getTimeLocDisplay(time: model.startTimeString, loc: model.carModel.startLoc!),
+                                  ],
+                                ),
                               ),
                               const Divider(
                                 indent: 20,
                               ),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width: 16,
-                                    height: 16,
-                                    child: CircularProgressIndicator(
-                                      color: Theme.of(context).colorScheme.primary,
-                                      value: 1,
+                              MaterialButton(
+                                onPressed: () {
+                                  if (mapController != null) {
+                                    moveCamera(model.destinationLatLng, model);
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(
+                                        color: Theme.of(context).colorScheme.primary,
+                                        value: 1,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  getTimeLocDisplay(time: model.endTimeString, loc: model.carModel.endLoc!),
-                                ],
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    getTimeLocDisplay(time: model.expectedArrivedTimeString, loc: model.carModel.endLoc!),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -143,8 +174,11 @@ class CarPoolBottomSheetView extends StatelessWidget {
                                   icon: const Icon(Icons.exit_to_app),
                                 )
                               : ElevatedButton.icon(
-                                  onPressed: () async{
+                                  onPressed: () async {
                                     await user.joinCarPool(model.carModel);
+                                    if (context.mounted) {
+                                      Navigator.pop(context);
+                                    }
                                   },
                                   style: ElevatedButton.styleFrom(
                                     elevation: 3.0,
@@ -158,7 +192,6 @@ class CarPoolBottomSheetView extends StatelessWidget {
                         ),
                       ],
                     )
-
                   ],
                 )),
           ),

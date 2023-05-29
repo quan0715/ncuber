@@ -84,13 +84,13 @@ class CarPoolCard extends StatelessWidget {
                                     height: 12,
                                     child: CircularProgressIndicator(
                                       color: Theme.of(context).colorScheme.primary,
-                                      value: 1,
+                                      value: model.isLoading ? null : 1,
                                     ),
                                   ),
                                   const SizedBox(
                                     width: 10,
                                   ),
-                                  getTimeLocDisplay(time: model.endTimeString, loc: model.carModel.endLoc!)
+                                  getTimeLocDisplay(time: model.expectedArrivedTimeString, loc: model.carModel.endLoc!)
                                 ],
                               ),
                             ],

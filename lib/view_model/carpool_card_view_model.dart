@@ -19,6 +19,9 @@ class CarpoolCardViewModel extends ChangeNotifier {
   CarStatus get catStatus => carModel.status!;
   List<String> get personStuIds => carModel.personStuIds;
 
+  DateTime get carpoolStartTime => carModel.startTime!;
+  DateTime get expectedArrivedTime => carModel.startTime!.add(mapRoute?.duration ?? Duration.zero);
+
   MapRoute? mapRoute = MapRoute(duration: const Duration(seconds: 0), distance: 0, points: []);
 
   String getTimeString(DateTime time) {
@@ -29,7 +32,7 @@ class CarpoolCardViewModel extends ChangeNotifier {
   String get getTitleString => "${carModel.roomTitle} (${carModel.personStuIds.length} / ${carModel.personNumLimit})";
   String get startTimeString => getTimeString(carModel.startTime ?? DateTime.now());
   String get endTimeString => getTimeString(carModel.endTime ?? DateTime.now());
-
+  String get expectedArrivedTimeString => getTimeString(expectedArrivedTime);
   Future loadDate() async {
     isLoading = true;
     notifyListeners();

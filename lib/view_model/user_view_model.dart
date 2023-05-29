@@ -20,13 +20,8 @@ class UserViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  String? nameValidator(String? value) {
-    return userName!.isEmpty ? "請輸入姓名" : null;
-  }
-
-  String? studentIdValidator(String? value) {
-    return studentId!.length != 9 ? "請輸入正確學號" : null;
-  }
+  String? nameValidator(String? value) => userName!.isEmpty ? "請輸入姓名" : null;
+  String? studentIdValidator(String? value) => studentId!.length != 9 ? "請輸入正確學號" : null;
 
   Future<bool> login() async {
     PersonModel personModel =
@@ -83,31 +78,31 @@ class UserViewModel extends ChangeNotifier {
 
   Future joinCarPool(CarModel model) async {
     // for user join carpool
-    int status = await addPersonToCar(studentId!, currentCarModel!.carId!);
-    switch (status) {
-      case 1:
-        {
-          debugPrint("join car successfully.");
+    // int status = await addPersonToCar(studentId!, model.carId!);
+    // switch (status) {
+    //   case 1:
+    //     {
+    //       debugPrint("join car successfully.");
           model.personStuIds.add(studentId!);
           currentCarModel = model;
           notifyListeners();
-          break;
-        }
-      case 2:
-        {
-          debugPrint("the car fulled.");
-          break;
-        }
-      case 3:
-        {
-          debugPrint("the car has been destroyed.");
-          break;
-        }
-      default:
-        {
-          throw Exception("Server join car other error.");
-        }
-    }
+    //       break;
+    //     }
+    //   case 2:
+    //     {
+    //       debugPrint("the car fulled.");
+    //       break;
+    //     }
+    //   case 3:
+    //     {
+    //       debugPrint("the car has been destroyed.");
+    //       break;
+    //     }
+    //   default:
+    //     {
+    //       throw Exception("Server join car other error.");
+    //     }
+    // }
   }
 
   Future leaveCarPool() async {

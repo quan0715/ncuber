@@ -44,44 +44,47 @@ class _DashboardNcUberState extends State<DashboardNcUber> {
     return ChangeNotifierProvider<ShowAllCarPooViewModel>(
       create: (context) => ShowAllCarPooViewModel()..fetchAllCarpoolDataFromRepo(),
       child: Consumer<ShowAllCarPooViewModel>(
-          builder: (context, viewModel, child) => Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("歡迎回來",style: TextStyle(fontSize: 22)),
-                        Consumer<UserViewModel>(
-                            builder: (context, model, child) =>
-                                Text("${model.userName}, ${model.studentId}", style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
-                      ],
-                    ),
-                  ),
-                  viewModel.carpoolListIsEmpty
-                    ? Expanded(child: emptyListView())
-                    : Expanded(
-                        child: ListView.builder(
-                            itemCount: viewModel.allCarpoolData!.length,
-                            itemBuilder: (context, index) {
-                              final carPool = viewModel.allCarpoolData![index];
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 0),
-                                child: MaterialButton(
-                                    onPressed: () => onCarClicked(carPool),
-                                    child: ChangeNotifierProvider<CarpoolCardViewModel>(
-                                        create: (context) => CarpoolCardViewModel(carModel: carPool), 
-                                        child:  const CarPoolCard()
-                                    )
-                                ),
-                              );
-                            },
-                        ),
+          builder: (context, viewModel, child) => RefreshIndicator(
+            onRefresh: viewModel.fetchAllCarpoolDataFromRepo,
+            child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("歡迎回來",style: TextStyle(fontSize: 22)),
+                          Consumer<UserViewModel>(
+                              builder: (context, model, child) =>
+                                  Text("${model.userName}, ${model.studentId}", style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+                        ],
                       ),
-                ],
-              )),
+                    ),
+                    viewModel.carpoolListIsEmpty
+                      ? Expanded(child: Center(child: emptyListView()))
+                      : Expanded(
+                          child: ListView.builder(
+                              itemCount: viewModel.allCarpoolData!.length,
+                              itemBuilder: (context, index) {
+                                final carPool = viewModel.allCarpoolData![index];
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+                                  child: MaterialButton(
+                                      onPressed: () => onCarClicked(carPool),
+                                      child: ChangeNotifierProvider<CarpoolCardViewModel>(
+                                          create: (context) => CarpoolCardViewModel(carModel: carPool)..loadDate(), 
+                                          child: const CarPoolCard()
+                                      )
+                                  ),
+                                );
+                              },
+                          ),
+                        ),
+                  ],
+                ),
+          )),
     );
   }
 }

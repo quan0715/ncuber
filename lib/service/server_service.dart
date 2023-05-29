@@ -33,17 +33,19 @@ class ServerService {
     HttpClientResponse response = await request.close();
 
     String reply = await response.transform(utf8.decoder).join();
-
-    if (response.headers.value('clientId') == serverClientId) {
-      debugPrint(response.headers.toString());
-      debugPrint(reply);
-      httpClient.close();
-
-      return jsonDecode(reply);
-    } else {
-      httpClient.close();
-      throw Exception('Failed to post to server.');
-    }
+    return jsonDecode(reply);
+    // debugPrint(reply);
+    // if (response.headers.value('clientId') == serverClientId) {
+    //   debugPrint(response.headers.toString());
+    //   debugPrint(reply);
+    //   httpClient.close();
+    //   return jsonDecode(reply);
+    // } else {
+    //   debugPrint(response.headers.toString());
+    //   debugPrint(reply);
+    //   httpClient.close();
+    //   throw Exception('Failed to post to server.');
+    // }
 
     // String? unDecodedHeader = resp.headers['Encrypted-Header'];
     // Map<String, dynamic> realHeader = decrypt(unDecodedHeader!);
