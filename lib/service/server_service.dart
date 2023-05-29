@@ -115,7 +115,7 @@ Future<CarModel> reqCarModelById(int carId) async {
   var json = await ServerService.postGet(body, apiUri);
 
   if (json["type"] == body["type"]) {
-    return CarModel.fromJson(json);
+    return CarModel.fromJson(json)..statusCheck();
   } else {
     throw Exception('server return wrong type of model.');
   }
@@ -184,7 +184,7 @@ Future<CarModel> sendCarModel(CarModel model) async {
   var json = await ServerService.postGet(body, apiUri);
 
   if (json["type"] == body["type"]) {
-    return CarModel.fromJson(json);
+    return CarModel.fromJson(json)..statusCheck();
   } else {
     throw Exception('server return wrong type of model.');
   }

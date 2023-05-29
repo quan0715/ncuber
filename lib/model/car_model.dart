@@ -59,7 +59,7 @@ class CarModel {
       this.roomTitle,
       this.status,
       this.launchStuId,
-      this.remark,
+      this.remark = "",
       this.startTime,
       this.startLoc,
       this.endTime,

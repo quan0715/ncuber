@@ -21,10 +21,13 @@ class UserViewModel extends ChangeNotifier {
   }
 
   String? nameValidator(String? value) => userName!.isEmpty ? "請輸入姓名" : null;
-  String? studentIdValidator(String? value) => studentId!.length != 9 ? "請輸入正確學號" : null;
+  String? studentIdValidator(String? value) =>
+      studentId!.length != 9 ? "請輸入正確學號" : null;
   PersonModel personModel = PersonModel();
+
   Future<bool> login() async {
-    personModel = await sendPersonModel(PersonModel(stuId: studentId, name: userName));
+    personModel =
+        await sendPersonModel(PersonModel(stuId: studentId, name: userName));
     try {
       await getCurrentCarModel();
       return true;
@@ -38,9 +41,11 @@ class UserViewModel extends ChangeNotifier {
     // check whether user have join carpool
     // if true then get carpool data
     // else set carpool data to null and
-    personModel = await sendPersonModel(PersonModel(stuId: studentId, name: userName));
-    debugPrint(personModel.nowCarId!.toString());
+    // Future.delayed(const Duration(milliseconds: 300));
+    personModel = await reqPersonModelByStuIdAndName(studentId!, userName!);
+    // debugPrint(personModel.nowCarId!.toString());
     if (readyToGetCarId != null) {
+      // Future.delayed(const Duration(milliseconds: 300));
       currentCarModel = await reqCarModelById(readyToGetCarId!);
       // currentCarModel = CarModel(
       //   roomTitle: "阿寬的共乘",
@@ -53,7 +58,7 @@ class UserViewModel extends ChangeNotifier {
       //   endLoc: "桃園高鐵站",
       //   genderLimit: 2,
       // ); // fake data
-      currentCarModel!.statusCheck();
+      // currentCarModel!.statusCheck(); // check at api
     } else {
       currentCarModel = null;
     }
@@ -67,10 +72,11 @@ class UserViewModel extends ChangeNotifier {
     model = await sendCarModel(model);
     debugPrint('$studentId ${model.carId}');
     await addPersonToCar(studentId!, model.carId!);
-    // assert(model.personStuIds.contains(studentId!) == true);
 
-    await getCurrentCarModel();
-    notifyListeners();
+    // model = await reqCarModelById(model.carId!);
+    // Future.delayed(const Duration(milliseconds: 300));
+    // await getCurrentCarModel();
+    assert(model.personStuIds.contains(studentId!) == true);
   }
 
   Future joinCarPool(CarModel model) async {
@@ -80,9 +86,7 @@ class UserViewModel extends ChangeNotifier {
       case 1:
         {
           debugPrint("join car successfully.");
-          model.personStuIds.add(studentId!);
-          currentCarModel = model;
-          notifyListeners();
+          await getCurrentCarModel();
           break;
         }
       case 2:
@@ -122,9 +126,6 @@ class UserViewModel extends ChangeNotifier {
         }
     }
 
-    // set current car pool to null
-    currentCarModel!.personStuIds.remove(studentId!);
-    currentCarModel = null;
-    notifyListeners();
+    await getCurrentCarModel();
   }
 }

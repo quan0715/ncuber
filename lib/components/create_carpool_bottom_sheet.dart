@@ -36,6 +36,7 @@ class _CreateCarpoolBottomSheetState extends State<CreateCarpoolBottomSheet> {
       bounds = LatLngBounds(southwest: point1, northeast: point2);
     } else {
       if (point1.longitude <= point2.longitude) {
+        // FIXME: Fail assert => 'southwest.latitude <= northeast.latitude' is not true
         bounds = LatLngBounds(southwest: point1, northeast: point2);
       } else {
         bounds = LatLngBounds(southwest: point2, northeast: point1);
