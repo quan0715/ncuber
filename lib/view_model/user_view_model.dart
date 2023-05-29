@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:ncuber/model/car_model.dart';
 
 class UserViewModel extends ChangeNotifier {
-  String? name = "";
+  String? userName = "";
   String? studentId = "";
   bool get isJoinCarpoolRoom => currentCarModel != null;
   CarModel? currentCarModel;
 
   void onNameChange(String value) {
-    name = value;
+    userName = value;
     notifyListeners();
   }
 
@@ -18,19 +18,25 @@ class UserViewModel extends ChangeNotifier {
   }
 
   String? nameValidator(String? value) {
-    return name!.isEmpty ? "請輸入姓名" : null;
+    return userName!.isEmpty ? "請輸入姓名" : null;
   }
 
   String? studentIdValidator(String? value) {
     return studentId!.length != 9 ? "請輸入正確學號" : null;
   }
 
-  void login() {
-    getCurrentCarModel();
+  Future<bool> login() async {
+    try {
+      await getCurrentCarModel();
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
     // TODO: implement login api
   }
 
-  void getCurrentCarModel() {
+  Future getCurrentCarModel() async {
     // TODO: implement getCurrentCarModel
     // check whether user have join carpool
     // if true then get carpool data
@@ -41,11 +47,35 @@ class UserViewModel extends ChangeNotifier {
       personNumLimit: 4,
       startTime: DateTime.now().add(const Duration(hours: 1)),
       endTime: DateTime.now().add(const Duration(hours: 2)),
-      personStuIds: ["109502563", "109502564", "109502565","109502565"],
+      personStuIds: ["109502563", "109502564", "109502565", "109502565"],
       startLoc: "國立中央大學校門口",
       endLoc: "桃園高鐵站",
-    );
+      genderLimit: 2,
+    ); // fake data
     currentCarModel!.statusCheck();
-    // notifyListeners();
+    notifyListeners();
+  }
+  
+
+  Future createNewCarModel(CarModel model) async {
+    // user creat a new carpool
+    // TODO: implement create new carpool
+    currentCarModel = model;
+    notifyListeners();
+  }
+
+  Future joinCarPool(CarModel model) async{
+    // for user join carpool
+    // TODO: implement join carpool api method
+    currentCarModel = model;
+    notifyListeners();
+  }
+
+  Future leaveCarPool() async {
+    // for user leave current car pool
+    // TODO: implement user leave carpool api method
+    // set current car pool to null
+    currentCarModel = null;
+    notifyListeners();
   }
 }

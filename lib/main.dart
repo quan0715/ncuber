@@ -5,6 +5,8 @@ import 'package:ncuber/view/outh_page_view.dart';
 import 'package:ncuber/view/test_person_view.dart';
 import 'package:ncuber/view_model/permission_requester_view_model.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:ncuber/view_model/user_view_model.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -23,19 +25,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     grantLocationPermission();
-    return MaterialApp(
-      title: 'NCUBER',
-      theme: ThemeData(
-        colorSchemeSeed: const Color(0XFF00639B),
-        useMaterial3: true,
+    return ChangeNotifierProvider<UserViewModel>(
+      create: (context) => UserViewModel(),
+      child: MaterialApp(
+        title: 'NCUBER',
+        theme: ThemeData(
+          colorSchemeSeed: const Color(0XFF00639B),
+          useMaterial3: true,
+        ),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const OuthView(),
+          '/map': (context) => const CreateCarPoolView(),
+          '/dashboard': (context) => const DashboardView(),
+          '/test': (context) => const TestPersonView(),
+        },
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => OuthView(),
-        '/map': (context) => const CreateCarPoolView(),
-        '/dashboard': (context) => const DashboardView(),
-        '/test': (context) => TestPersonView(),
-      },
     );
   }
 }

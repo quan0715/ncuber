@@ -12,6 +12,8 @@ class CreateCarPoolViewModel extends ChangeNotifier {
   bool isLoading = false;
   bool isStartPointTextFieldFocused = false;
   bool isDestinationTextFieldFocused = false;
+  final checkFormatter = DateFormat('yyyy-MM-dd');
+  final formatter = DateFormat('MM-dd HH:mm');
   LatLng get startPoint => mapApi.startPointLatLng ?? currentLocation;
   LatLng get destination => mapApi.destinationLatLng ?? currentLocation;
   bool get canDrawRoute => mapApi.startPointLatLng != null && mapApi.destinationLatLng!=null;
@@ -28,10 +30,9 @@ class CreateCarPoolViewModel extends ChangeNotifier {
   String? get roomTitle => carModel.roomTitle;
   String? get roomRemark => carModel.remark;
   List<String> numberOfPeopleLabel = const ["2", "3", "4", "5", "6", "7", "8"];
-  List<String> genderConstrainLabel = const ["限男性", "限女性", "性別不拘"]; // FIXME. genderLimit use int so please use it as showing
+  List<String> genderConstrainLabel = const ["限男性", "限女性", "性別不拘"];
+  // FIXME. genderLimit use int so please use it as showing
   CarModel carModel = CarModel(
-    roomTitle: "",
-    remark: "",
     startTime: DateTime.now(),
     endTime: DateTime.now(),
     startLoc: "",
@@ -44,8 +45,7 @@ class CreateCarPoolViewModel extends ChangeNotifier {
   int numberOfPeopleDropdownMenuIndex = 2;
   int genderConstrainDropdownMenuIndex = 2;
   String getTimeString(DateTime time) {
-    final checkFormatter = DateFormat('yyyy-MM-dd');
-    final formatter = DateFormat('MM-dd HH:mm');
+    
     final nowDate = checkFormatter.format(DateTime.now());
     return nowDate == checkFormatter.format(time) ? "Today ${DateFormat("HH:mm").format(time)}" : formatter.format(time);
   }
@@ -63,7 +63,7 @@ class CreateCarPoolViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  String? roomTitleValidator(String? value) => roomTitle!.isEmpty || roomTitle!.length > 10 ? "名稱不得為空或超過10個字元" : null;
+  String? roomTitleValidator(String? value) => (roomTitle!.isEmpty || roomTitle!.length > 10) ? "名稱不得為空或超過10個字元" : null;
   String? remarkValidator(String? value) => null;
 
   void updateNumberOfPeople(int index) {
@@ -115,13 +115,8 @@ class CreateCarPoolViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  String? startPointValidator(String? value) {
-    return startAddress.isEmpty ? "輸入不可為空" : null;
-  }
-
-  String? destinationPointValidator(String? value) {
-    return destinationAddress.isEmpty ? "輸入不可為空" : null;
-  }
+  String? startPointValidator(String? value) => startAddress.isEmpty ? "輸入不可為空" : null;  
+  String? destinationPointValidator(String? value) => destinationAddress.isEmpty ? "輸入不可為空" : null;
 
   Future getUserLocation() async {
     isLoading = true;
@@ -154,25 +149,25 @@ class CreateCarPoolViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onStartTextFieldFocused() {
-    isStartPointTextFieldFocused = true;
-    isDestinationTextFieldFocused = false;
-    notifyListeners();
-  }
+  // void onStartTextFieldFocused() {
+  //   isStartPointTextFieldFocused = true;
+  //   isDestinationTextFieldFocused = false;
+  //   notifyListeners();
+  // }
 
-  void onDestinationTextFieldFocused() {
-    isDestinationTextFieldFocused = true;
-    isStartPointTextFieldFocused = false;
-    notifyListeners();
-  }
+  // void onDestinationTextFieldFocused() {
+  //   isDestinationTextFieldFocused = true;
+  //   isStartPointTextFieldFocused = false;
+  //   notifyListeners();
+  // }
 
-  void checkSchdule() {
-    showButtomSheet = true;
-    notifyListeners();
-  }
+  // void checkSchdule() {
+  //   showButtomSheet = true;
+  //   notifyListeners();
+  // }
 
-  void closeButtomSheet() {
-    showButtomSheet = false;
-    notifyListeners();
-  }
+  // void closeButtomSheet() {
+  //   showButtomSheet = false;
+  //   notifyListeners();
+  // }
 }

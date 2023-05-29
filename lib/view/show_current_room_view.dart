@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:ncuber/components/carpool_buttom_sheet.dart';
+import 'package:ncuber/components/carpool_bottom_sheet.dart';
 import 'package:ncuber/view_model/carpool_card_view_model.dart';
 import 'package:ncuber/view_model/create_carpool_view_model.dart';
 import 'package:provider/provider.dart';

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:ncuber/components/status_chip.dart';
-import 'package:ncuber/model/car_model.dart';
 import 'package:ncuber/view_model/carpool_card_view_model.dart';
 import 'package:provider/provider.dart';
 

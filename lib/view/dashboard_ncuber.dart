@@ -1,7 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:ncuber/components/carpool_buttom_sheet.dart';
+import 'package:ncuber/components/carpool_bottom_sheet.dart';
 import 'package:ncuber/components/carpool_dashboard_card.dart';
 import 'package:ncuber/model/car_model.dart';
 import 'package:ncuber/view_model/carpool_card_view_model.dart';
@@ -44,7 +42,7 @@ class _DashboardNcUberState extends State<DashboardNcUber> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ShowAllCarPooViewModel>(
-      create: (context) => ShowAllCarPooViewModel(),
+      create: (context) => ShowAllCarPooViewModel()..fetchAllCarpoolDataFromRepo(),
       child: Consumer<ShowAllCarPooViewModel>(
           builder: (context, viewModel, child) => Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -55,34 +53,33 @@ class _DashboardNcUberState extends State<DashboardNcUber> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "歡迎回來",
-                          style: TextStyle(fontSize: 22),
-                        ),
+                        const Text("歡迎回來",style: TextStyle(fontSize: 22)),
                         Consumer<UserViewModel>(
                             builder: (context, model, child) =>
-                                Text("${model.name}, ${model.studentId}", style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+                                Text("${model.userName}, ${model.studentId}", style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
                       ],
                     ),
                   ),
                   viewModel.carpoolListIsEmpty
-                      ? Expanded(child: emptyListView())
-                      : Expanded(
-                          child: ListView.builder(
-                            itemCount: viewModel.allCarpoolData.length,
+                    ? Expanded(child: emptyListView())
+                    : Expanded(
+                        child: ListView.builder(
+                            itemCount: viewModel.allCarpoolData!.length,
                             itemBuilder: (context, index) {
-                              final carPool = viewModel.allCarpoolData[index];
+                              final carPool = viewModel.allCarpoolData![index];
                               return Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                                 child: MaterialButton(
-                                    // clipBehavior: Clip.none,
                                     onPressed: () => onCarClicked(carPool),
                                     child: ChangeNotifierProvider<CarpoolCardViewModel>(
-                                        create: (context) => CarpoolCardViewModel(carModel: carPool), child: const CarPoolCard())),
+                                        create: (context) => CarpoolCardViewModel(carModel: carPool), 
+                                        child:  const CarPoolCard()
+                                    )
+                                ),
                               );
                             },
-                          ),
                         ),
+                      ),
                 ],
               )),
     );
