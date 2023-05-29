@@ -38,9 +38,7 @@ class _DashboardNcUberState extends State<DashboardNcUber> {
         context: context,
         isScrollControlled: true,
         builder: (context) => ChangeNotifierProvider<CarpoolCardViewModel>(
-          create: (context) => CarpoolCardViewModel(carModel: data),
-          child: const CarPoolButtomSheetView())
-        );
+            create: (context) => CarpoolCardViewModel(carModel: data), child: const CarPoolBottomSheetView()));
   }
 
   @override
@@ -49,43 +47,44 @@ class _DashboardNcUberState extends State<DashboardNcUber> {
       create: (context) => ShowAllCarPooViewModel(),
       child: Consumer<ShowAllCarPooViewModel>(
           builder: (context, viewModel, child) => Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
                           "歡迎回來",
                           style: TextStyle(fontSize: 22),
                         ),
-                    Consumer<UserViewModel>(
-                        builder: (context, model, child) => Text("${model.name}, ${model.studentId}", style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
-                  ],
-                ),
-              ),
-              viewModel.carpoolListIsEmpty
-                  ? Expanded(child: emptyListView())
-                  : Expanded(
-                      child: ListView.builder(
-                        itemCount: viewModel.allCarpoolData.length,
-                        itemBuilder: (context, index) {
-                          final carPool = viewModel.allCarpoolData[index];
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 0),
-                            child: MaterialButton(
-                                // clipBehavior: Clip.none,
-                                onPressed: () => onCarClicked(carPool),
-                                child: ChangeNotifierProvider<CarpoolCardViewModel>(
-                                    create: (context) => CarpoolCardViewModel(carModel: carPool), child: const CarPoolCard())),
-                          );
-                        },
-                      ),
+                        Consumer<UserViewModel>(
+                            builder: (context, model, child) =>
+                                Text("${model.name}, ${model.studentId}", style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+                      ],
                     ),
-            ],
-          )),
+                  ),
+                  viewModel.carpoolListIsEmpty
+                      ? Expanded(child: emptyListView())
+                      : Expanded(
+                          child: ListView.builder(
+                            itemCount: viewModel.allCarpoolData.length,
+                            itemBuilder: (context, index) {
+                              final carPool = viewModel.allCarpoolData[index];
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+                                child: MaterialButton(
+                                    // clipBehavior: Clip.none,
+                                    onPressed: () => onCarClicked(carPool),
+                                    child: ChangeNotifierProvider<CarpoolCardViewModel>(
+                                        create: (context) => CarpoolCardViewModel(carModel: carPool), child: const CarPoolCard())),
+                              );
+                            },
+                          ),
+                        ),
+                ],
+              )),
     );
   }
 }

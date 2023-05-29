@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:ncuber/view_model/user_view_model.dart';
 
 class OuthView extends StatefulWidget {
-  OuthView({Key? key}) : super(key: key);
+  const OuthView({Key? key}) : super(key: key);
 
   @override
   State<OuthView> createState() => _OuthViewState();
@@ -55,7 +55,7 @@ class _OuthViewState extends State<OuthView> {
                         ElevatedButton.icon(
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
-                              // model.login();
+                              model.login();
                               Navigator.pushNamed(context, '/dashboard', arguments: model);
                             }
                           },

@@ -105,7 +105,6 @@ class CarModel {
 
   void statusCheck() {
     var presentTime = DateTime.now();
-
     if (presentTime.compareTo(endTime!) > 0) {
       status = CarStatus.end();
     } else if (presentTime.compareTo(startTime!) > 0 &&

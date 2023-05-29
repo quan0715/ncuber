@@ -47,13 +47,11 @@ class CreateCarPoolViewState extends State<CreateCarPoolView> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<CreateCarPoolViewModel>(
-      create: (context) => CreateCarPoolViewModel()..getUserLocation(),
-      child: Consumer<CreateCarPoolViewModel>(
-        builder: (context, model, child) => model.isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : Scaffold(
-                bottomSheet: Consumer<CreateCarPoolViewModel>(
+    return Consumer<CreateCarPoolViewModel>(
+      builder: (context, model, child) => model.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Scaffold(
+              bottomSheet: Consumer<CreateCarPoolViewModel>(
                   builder: (context, model, child) => SingleChildScrollView(
                     child: SafeArea(
                       child: Padding(
@@ -277,57 +275,70 @@ class CreateCarPoolViewState extends State<CreateCarPoolView> {
                       ),
                     ),
                   ),
-                ),
-                appBar: AppBar(
-                  leading: IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.arrow_back),
-                  ),
-                  title: const Text("建立共乘"),
-                ),
-                body: SafeArea(
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    child: Stack(alignment: Alignment.center, children: [
+              ),
+              body: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: SafeArea(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
                       GoogleMap(
-                        mapType: MapType.normal,
-                        initialCameraPosition: CameraPosition(target: model.startPoint, zoom: 19.151926040649414),
-                        onMapCreated: (GoogleMapController controller) {
-                          _controller.complete(controller);
-                        },
-                        markers: {
-                          Marker(
-                              markerId: const MarkerId("current"),
-                              position: model.currentLocation,
-                              infoWindow: const InfoWindow(title: "目前位置"),
-                              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)),
-                          Marker(
-                              markerId: const MarkerId("start"),
-                              position: model.startPoint,
-                              infoWindow: const InfoWindow(title: "起點站"),
-                              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)),
-                          Marker(
-                              markerId: const MarkerId("end"),
-                              position: model.destination,
-                              infoWindow: const InfoWindow(title: "終點"),
-                              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange))
-                        },
-                        polylines: {
-                          Polyline(
-                              startCap: Cap.roundCap,
-                              endCap: Cap.squareCap,
-                              polylineId: const PolylineId("route"),
-                              points: model.mapRoute!.points,
-                              color: Colors.blue,
-                              width: 5)
-                        },
+                        // padding: const EdgeInsets.only(bottom: 100),
+                          myLocationEnabled: true,
+                          myLocationButtonEnabled: true,
+                          trafficEnabled: true,
+                          mapType: MapType.normal,
+                          initialCameraPosition: CameraPosition(target: model.startPoint, zoom: 19.151926040649414),
+                          onMapCreated: (GoogleMapController controller) {
+                            _controller.complete(controller);
+                          },
+                          markers: {
+                            Marker(
+                                markerId: const MarkerId("current"),
+                                position: model.currentLocation,
+                                infoWindow: const InfoWindow(title: "目前位置"),
+                                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)),
+                            Marker(
+                                markerId: const MarkerId("start"),
+                                position: model.startPoint,
+                                infoWindow: const InfoWindow(title: "起點站"),
+                                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)),
+                            Marker(
+                                markerId: const MarkerId("end"),
+                                position: model.destination,
+                                infoWindow: const InfoWindow(title: "終點"),
+                                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange))
+                          },
+                          polylines: {
+                            Polyline(
+                                startCap: Cap.roundCap,
+                                endCap: Cap.squareCap,
+                                polylineId: const PolylineId("route"),
+                                points: model.mapRoute!.points,
+                                color: Colors.blue,
+                                width: 5)
+                          },
+                        ),
+                        Positioned(
+                        top: 20,
+                        left: 20,
+                        child: CircleAvatar(
+                          radius: 25,
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.arrow_back,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ),
                       ),
-                      // const SizedBox(height: 10),
-                    ]),
+                    ],
                   ),
                 ),
               ),
-      ),
+            ),
     );
   }
 }

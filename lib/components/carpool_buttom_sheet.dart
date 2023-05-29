@@ -5,8 +5,9 @@ import 'package:ncuber/model/car_model.dart';
 import 'package:ncuber/view_model/carpool_card_view_model.dart';
 import 'package:provider/provider.dart';
 
-class CarPoolButtomSheetView extends StatelessWidget {
-  const CarPoolButtomSheetView({super.key});
+class CarPoolBottomSheetView extends StatelessWidget {
+  const CarPoolBottomSheetView({super.key});
+  final showCurrentCarPool = true;
   Widget getTimeLocDisplay({required String time, required String loc}) {
     // final formatter = DateFormat('yyyy-MM-dd HH:mm');
     return Column(
@@ -34,7 +35,7 @@ class CarPoolButtomSheetView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(model.getTitleString, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                      StatusChip(status: model.carStatus)
+                      StatusChip(status: model.catStatus)
                     ],
                   ),
                   Padding(
@@ -106,7 +107,21 @@ class CarPoolButtomSheetView extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton.icon(
+                        child: showCurrentCarPool?
+                         ElevatedButton.icon(
+                          onPressed: () {
+                            // TODO 離開房間
+                          },
+                          style: ElevatedButton.styleFrom(
+                            elevation: 3.0,
+                            // visualDensity: VisualDensity.compact,
+                            backgroundColor: Theme.of(context).colorScheme.error,
+                            foregroundColor: Theme.of(context).colorScheme.onError,
+                          ),
+                          label: const Text("離開房間"),
+                          icon: const Icon(Icons.exit_to_app),
+                        ):
+                        ElevatedButton.icon(
                           onPressed: () {
                             // TODO 加入共乘
                           },
