@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 class CarPoolBottomSheetView extends StatelessWidget {
   const CarPoolBottomSheetView({super.key});
   Widget getTimeLocDisplay({required String time, required String loc}) {
-    // final formatter = DateFormat('yyyy-MM-dd HH:mm');
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,11 +22,13 @@ class CarPoolBottomSheetView extends StatelessWidget {
     return Consumer<UserViewModel>(
       builder: (context, user, child) => Consumer<CarpoolCardViewModel>(
         builder: (context, model, child) => SafeArea(
+          top: false,
           child: SingleChildScrollView(
             child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 14),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
                       mainAxisSize: MainAxisSize.max,
@@ -42,7 +43,7 @@ class CarPoolBottomSheetView extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: Text(model.carModel.remark!, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                          child: Text(model.carModel.remark!, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary)),
                         ),
                       ],
                     ),
@@ -63,7 +64,7 @@ class CarPoolBottomSheetView extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.symmetric(vertical: 10,),
                       child: Container(
                         decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.surface, shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(10.0)),

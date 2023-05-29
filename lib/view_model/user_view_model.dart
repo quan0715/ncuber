@@ -55,18 +55,19 @@ class UserViewModel extends ChangeNotifier {
     currentCarModel!.statusCheck();
     notifyListeners();
   }
-  
 
   Future createNewCarModel(CarModel model) async {
     // user creat a new carpool
     // TODO: implement create new carpool
+    model.personStuIds.add(studentId!);
     currentCarModel = model;
     notifyListeners();
   }
 
-  Future joinCarPool(CarModel model) async{
+  Future joinCarPool(CarModel model) async {
     // for user join carpool
     // TODO: implement join carpool api method
+    model.personStuIds.add(studentId!);
     currentCarModel = model;
     notifyListeners();
   }
@@ -75,6 +76,7 @@ class UserViewModel extends ChangeNotifier {
     // for user leave current car pool
     // TODO: implement user leave carpool api method
     // set current car pool to null
+    currentCarModel!.personStuIds.remove(studentId!);
     currentCarModel = null;
     notifyListeners();
   }
