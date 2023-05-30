@@ -19,7 +19,7 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Consumer<UserViewModel>(
-      builder: (context, model, child) => 
+      builder: (context, model, child) =>
       model.isJoinCarpoolRoom ? ChangeNotifierProvider<CarpoolCardViewModel>(
           create: (context) => CarpoolCardViewModel(carModel: model.currentCarModel!)..loadDate(),
           child: const ShowCurrentCarpoolView()
@@ -29,7 +29,7 @@ class _DashboardViewState extends State<DashboardView> {
           title: const Text('NCUBER'),
           automaticallyImplyLeading: false,
         ),
-        floatingActionButton: model.isJoinCarpoolRoom ? null :  
+        floatingActionButton: model.isJoinCarpoolRoom ? null :
         FloatingActionButton.extended(
           label: const Text('發起共乘'),
           icon: const Icon(Icons.add),
@@ -38,7 +38,7 @@ class _DashboardViewState extends State<DashboardView> {
           },
         ),
         // TODO: check if person have join cardpool show carpool otherwise show dashboard
-        body: const DashboardNcUber() 
+        body: const DashboardNcUber()
       ),
     );
   }

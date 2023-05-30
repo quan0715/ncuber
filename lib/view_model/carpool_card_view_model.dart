@@ -20,7 +20,7 @@ class CarpoolCardViewModel extends ChangeNotifier {
   List<String> get personStuIds => carModel.personStuIds;
 
   DateTime get carpoolStartTime => carModel.startTime!;
-  DateTime get expectedArrivedTime => carModel.startTime!.add(mapRoute?.duration ?? Duration.zero);
+  DateTime get expectedArrivedTime => carModel.endTime ?? carModel.startTime!.add(mapRoute?.duration ?? Duration.zero);
 
   MapRoute? mapRoute = MapRoute(duration: const Duration(seconds: 0), distance: 0, points: []);
 

@@ -14,7 +14,14 @@ class ShowAllCarPooViewModel extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     // fetch data from repo
-    allCarpoolData = await reqLastNumsOfCarModel();
+    // allCarpoolData = await reqLastNumsOfCarModel();
+    var tmpAllCarpoolDataList = await reqLastNumsOfCarModel();
+    allCarpoolData = [];
+    for (var carpool in tmpAllCarpoolDataList) {
+      if (carpool.status!.statusName != '已結束') {
+        allCarpoolData?.add(carpool);
+      }
+    }
     // if no data use fake data to demo
     // if (allCarpoolData!.isEmpty) {
     //   // implement code here
