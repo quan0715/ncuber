@@ -80,7 +80,7 @@ class CarModel {
         endLoc: '桃園高鐵站',
         personNumLimit: 5,
         genderLimit: 0,
-        personStuIds: [launchStuId],  
+        personStuIds: [launchStuId],
       );
 
   factory CarModel.fromJson(Map<String, dynamic> json) {
@@ -89,9 +89,9 @@ class CarModel {
       roomTitle: json['roomTitle'] as String,
       launchStuId: json['launchStuId'].toString(),
       remark: json['remark'] as String,
-      startTime: DateTime.tryParse(json['startTime'] as String) as DateTime,
+      startTime: DateTime.tryParse(json['startTime'] as String)!.toLocal(),
       startLoc: json['startLoc'] as String,
-      endTime: DateTime.tryParse(json['endTime'] as String) as DateTime,
+      endTime: DateTime.tryParse(json['endTime'] as String)!.toLocal(),
       endLoc: json['endLoc'] as String,
       personNumLimit: json['personNumLimit'] as int,
       genderLimit: json['genderLimit'] as int,
