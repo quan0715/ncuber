@@ -71,7 +71,7 @@ class CarPoolBottomSheetView extends StatelessWidget {
                                   padding: const EdgeInsets.all(4.0),
                                   child: Chip(
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                                    avatar: const Icon(Icons.donut_large),
+                                    avatar: const Icon(Icons.emoji_people_rounded),
                                     label: Text(studentId),
                                   ),
                                 ))

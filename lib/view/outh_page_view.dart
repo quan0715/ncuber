@@ -15,7 +15,7 @@ class _OuthViewState extends State<OuthView> {
   final formKey = GlobalKey<FormState>();
   final whiteCarPath = "assets/images/w_car.png";
   final redCarPath = "assets/images/r_car.png";
-  final yellowCarPath = "assets/images/b_car.png";
+  final yellowCarPath = "assets/images/y_car.png";
 
   void showLoginsheet() {
     showModalBottomSheet(
