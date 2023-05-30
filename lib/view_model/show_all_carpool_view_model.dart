@@ -14,7 +14,7 @@ class ShowAllCarPooViewModel extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     // fetch data from repo
-    allCarpoolData = await reqLastNumsOfCarModel(3);
+    allCarpoolData = await reqLastNumsOfCarModel();
     // if no data use fake data to demo
     // if (allCarpoolData!.isEmpty) {
     //   // implement code here

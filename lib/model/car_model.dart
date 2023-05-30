@@ -80,14 +80,14 @@ class CarModel {
         endLoc: '桃園高鐵站',
         personNumLimit: 5,
         genderLimit: 0,
-        personStuIds: [launchStuId],
+        personStuIds: [launchStuId],  
       );
 
   factory CarModel.fromJson(Map<String, dynamic> json) {
     var carModel = CarModel(
       carId: json['carId'] as int,
       roomTitle: json['roomTitle'] as String,
-      launchStuId: (json['launchStuId'] as int).toString(),
+      launchStuId: json['launchStuId'].toString(),
       remark: json['remark'] as String,
       startTime: DateTime.tryParse(json['startTime'] as String) as DateTime,
       startLoc: json['startLoc'] as String,

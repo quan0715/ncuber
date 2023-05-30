@@ -21,15 +21,15 @@ class ServerService {
     // final resp = await http.post(Uri.parse(SERVER_URL),
     //     headers: <String, String>{"Encrypted-Header": encryptedHeader},
     //     body: encrypt(jsonBody));
+    debugPrint(jsonBody.toString());
+
     HttpClient httpClient = HttpClient();
     HttpClientRequest request = await httpClient.postUrl(apiUri);
     request.headers.set('Content-Type', 'application/json; charset=UTF-8');
     request.headers.set('clientId', serverClientId);
-
-    // debugPrint(jsonBody.toString());
     request.add(utf8.encode(jsonEncode(jsonBody)));
-
     HttpClientResponse response = await request.close();
+
     String reply = await response.transform(utf8.decoder).join();
     debugPrint(reply.toString());
     return jsonDecode(reply);
@@ -80,10 +80,10 @@ class ServerService {
 
 /// --- server apis ---
 
-Future<List<CarModel>> reqLastNumsOfCarModel(int numsOfCars) async {
+Future<List<CarModel>> reqLastNumsOfCarModel() async {
   Map<String, dynamic> body = {
     "type": "req_nums_of_cars",
-    "numbers": numsOfCars,
+    // "numbers": numsOfCars,
   };
 
   Uri apiUri = Uri.parse("${ServerService.serverBaseUrl}/req_latest_nums_of_carModel");
@@ -245,3 +245,7 @@ Future<PersonModel> reqPersonModelByStuIdAndName(String stuId, String name) asyn
     throw Exception('server return wrong type of model.');
   }
 }
+
+// Future loginInOrSignUp(String stuId, String name) {
+//   Uri apiUri = Uri
+// }

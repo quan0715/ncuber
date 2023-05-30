@@ -75,8 +75,8 @@ class UserViewModel extends ChangeNotifier {
 
     // model = await reqCarModelById(model.carId!);
     // Future.delayed(const Duration(milliseconds: 300));
-    // await getCurrentCarModel();
-    assert(model.personStuIds.contains(studentId!) == true);
+    await getCurrentCarModel();
+    // assert(model.personStuIds.contains(studentId!) == true);
   }
 
   Future joinCarPool(CarModel model) async {
