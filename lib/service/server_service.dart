@@ -16,6 +16,7 @@ class ServerService {
   // static String encryptedHeader = encrypt(headers);
   static const serverClientId = "iBTFJjVUJQ7uZa4MVLXRcM2WLN6S1P";
   static const serverBaseUrl = 'https://ncuber.pythonanywhere.com';
+  // static const serverBaseUrl = 'https://ncuber-backend.fly.dev/';
 
   static Future<Map<String, dynamic>> postGet(Map<String, dynamic> jsonBody, Uri apiUri) async {
     // final resp = await http.post(Uri.parse(SERVER_URL),
