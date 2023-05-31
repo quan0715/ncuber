@@ -59,6 +59,8 @@ class _DashboardNcUberState extends State<DashboardNcUber> {
                           Consumer<UserViewModel>(
                               builder: (context, model, child) =>
                                   Text("${model.userName}, ${model.studentId}", style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+                          const Divider(),
+                          Text("目前所有共乘",style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.bold),),  
                         ],
                       ),
                     ),

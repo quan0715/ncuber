@@ -72,7 +72,7 @@ class CarPoolBottomSheetView extends StatelessWidget {
                                   child: Chip(
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
                                     avatar: const Icon(Icons.emoji_people_rounded),
-                                    label: Text(studentId),
+                                    label: Text(studentId == user.personModel.stuId ? user.personModel.name! : studentId),
                                   ),
                                 ))
                             .toList(),
